@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="5" column="0">
+    <item row="7" column="0">
      <widget class="QTextEdit" name="testTextBox">
       <property name="enabled">
        <bool>false</bool>
@@ -25,20 +25,27 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
+    <item row="10" column="0">
      <widget class="QTextEdit" name="typedTextBox"/>
     </item>
-    <item row="6" column="1">
+    <item row="7" column="3">
+     <widget class="QPushButton" name="openFileButton">
+      <property name="text">
+       <string>&amp;Otwórz</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="3">
      <widget class="QPushButton" name="saveButton">
       <property name="text">
        <string>&amp;Zapisz</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QPushButton" name="openFileButton">
+    <item row="11" column="0">
+     <widget class="QLabel" name="charPerMinute">
       <property name="text">
-       <string>&amp;Otwórz</string>
+       <string>TextLabel</string>
       </property>
      </widget>
     </item>
@@ -50,7 +57,7 @@
      <x>0</x>
      <y>0</y>
      <width>667</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
-
+#include <QTime>
 
 namespace Ui {
 class MainWindow;
@@ -22,8 +22,15 @@ private slots:
 
     void on_openFileButton_clicked();
 
+    void on_typedTextBox_textChanged();
+
 private:
     Ui::MainWindow *ui;
+    QTime elapsedTime; //czas od rozpoczecia przepisywania
+    QString shownText; //tekst do przepisania
+    QString typedText; //tekst przepisywany
+    QString speedChar_string; //np "400 znaków/min"
+    int counter; //chwilowo
 };
 
 
