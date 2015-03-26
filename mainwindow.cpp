@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QFile plik(":/res/res/Instrukcja.txt");
     show_text(plik);
 
+    // połącznie sygnału zmiany tekstu wpisywanego z metodą obsługi błędu -> funkcja error()
+    connect( ui->typedTextBox, SIGNAL(textChanged()), this, SLOT(error()));
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +41,7 @@ void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej e
 {
     counter++; //nieelegancko - do poprawy
     typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
+
     if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
     {
         elapsedTime.start();
@@ -105,3 +108,19 @@ void MainWindow::on_textList_activated(const QString &arg1)
         open_file();
     }
 }
+
+//jakoś działa -> pokazuje to pomocnicze okno
+void MainWindow::error(){
+ QString temp;
+ temp = shownText;
+ int  STL = shownText.length();
+ int TTL = typedText.length();
+ temp.chop(STL-TTL);
+ if(temp==typedText)
+    ui->tekstProba->setText("OK");
+ else
+     ui->tekstProba->setText("Not OK");
+
+
+}
+
