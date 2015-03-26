@@ -22,9 +22,17 @@ MainWindow::~MainWindow()
 
 void MainWindow:: open_file(){
 
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
+   // QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
 
-    QFile plik(fileName);
+   // QFile plik(fileName);
+
+    QFile plik(":/res/res/Tekst 3.txt");
+
+    /*
+    QFile plik(":/res/res/Tekst 1.txt");
+    ten fragment kodu ładnia dodan nam tekst ze żródeł :D
+    */
+
 
         // możemy tylko czytać dane, oraz wczytujemy je jako tekst:
         if(!plik.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -71,4 +79,56 @@ void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej e
         speedChar_string = speedChar_string + " znaków/min";
         ui->charPerMinute->setText(speedChar_string); //do labela
     }
+}
+
+void MainWindow::on_loadButton_clicked()
+{
+
+    // nie wiem jak zrobić to bardziej elegancko
+    if(ui->textList->currentText()=="Tekst 1"){
+
+        QFile plik(":/res/res/Tekst 1.txt");
+        show_text(plik);
+    }
+    if(ui->textList->currentText()=="Tekst 2"){
+        QFile plik(":/res/res/Tekst 2.txt");
+        show_text(plik);
+    }
+    if(ui->textList->currentText()=="Tekst 3"){
+        QFile plik(":/res/res/Tekst 3.txt");
+        show_text(plik);
+    }
+    if(ui->textList->currentText()=="Tekst 4"){
+        QFile plik(":/res/res/Tekst 4.txt");
+        show_text(plik);
+    }
+    if(ui->textList->currentText()=="Tekst 5"){
+        QFile plik(":/res/res/Tekst 5.txt");
+        show_text(plik);
+    }
+
+
+
+}
+
+void MainWindow::show_text(QFile &file){
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;			 // jeżeli nie udało się otworzyć pliku: przerwij wczytywanie pliku
+
+    // czyścimy wcześniej zapełnioną zmienną tekstową
+    shownText.clear();
+
+
+    // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
+    QTextStream stream(&file);
+
+    // czytamy wszystkie dane
+    shownText = stream.readAll();
+
+    // umieszczamy je wewnątrz text boxa
+    ui->testTextBox->setText(shownText);
+
+    file.close();
+
 }

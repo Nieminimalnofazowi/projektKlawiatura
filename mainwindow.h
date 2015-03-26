@@ -19,12 +19,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void open_file();	 // otwieranie pliku
+    void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText
 private slots:
 
 
     void on_openFileButton_clicked();
 
     void on_typedTextBox_textChanged();
+
+    void on_loadButton_clicked();
 
 private:
     Ui::MainWindow *ui;
