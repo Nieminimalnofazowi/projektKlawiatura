@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 
-QString tekst;
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -32,17 +31,17 @@ void MainWindow:: open_file(){
             return;			 // jeżeli nie udało się otworzyć pliku: przerwij wczytywanie pliku
 
         // czyścimy wcześniej zapełnioną zmienną tekstową
-        tekst.clear();
+        shownText.clear();
 
 
         // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
         QTextStream stream(&plik);
 
         // czytamy wszystkie dane
-        tekst = stream.readAll();
+        shownText = stream.readAll();
 
         // umieszczamy je wewnątrz text boxa
-        ui->testTextBox->setText(tekst);
+        ui->testTextBox->setText(shownText);
 
         plik.close();
 }
