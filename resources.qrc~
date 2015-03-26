@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/res">
-	<file>res/Instrukcja.txt</file>
         <file>res/Tekst 1.txt</file>
         <file>res/Tekst 2.txt</file>
         <file>res/Tekst 3.txt</file>

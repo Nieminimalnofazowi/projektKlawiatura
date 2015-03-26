@@ -72,20 +72,10 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="openFileButton">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>140</y>
-      <width>131</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&amp;Otwórz</string>
-    </property>
-   </widget>
    <widget class="QComboBox" name="textList">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -94,6 +84,11 @@
       <height>22</height>
      </rect>
     </property>
+    <item>
+     <property name="text">
+      <string>Instrukcja</string>
+     </property>
+    </item>
     <item>
      <property name="text">
       <string>Tekst 1</string>
@@ -121,22 +116,14 @@
     </item>
     <item>
      <property name="text">
+      <string>Inny...</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string/>
      </property>
     </item>
-   </widget>
-   <widget class="QPushButton" name="loadButton">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>140</y>
-      <width>131</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Załaduj</string>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

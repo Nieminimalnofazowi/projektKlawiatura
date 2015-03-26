@@ -1,0 +1,4 @@
+Niniejszy test służy sprawdzeniu szybkości pisania na klawiaturze. 
+Rozwijana lista poniżej zawiera teksty, które należy przepisać. 
+Test rozpocznie się po wpisaniu pierwszej litery. 
+JAK MASZ POMYSŁ PRZEMO, TO ZEDYTUJ TO JAKOŚ LEPIEJ ;)

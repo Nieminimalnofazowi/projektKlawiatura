@@ -22,12 +22,8 @@ public:
     void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText
 private slots:
 
-
-    void on_openFileButton_clicked();
-
     void on_typedTextBox_textChanged();
-
-    void on_loadButton_clicked();
+    void on_textList_activated(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
