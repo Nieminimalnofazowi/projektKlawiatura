@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 
-
+QString tekst;
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     counter=0; //do usuniecia gdy zmienie na dodatkowy timer!
     ui->charPerMinute->setText("0.0 znaków/min");
+
+
 }
 
 MainWindow::~MainWindow()
@@ -19,11 +21,36 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow:: open_file(){
+
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
+
+    QFile plik(fileName);
+
+        // możemy tylko czytać dane, oraz wczytujemy je jako tekst:
+        if(!plik.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;			 // jeżeli nie udało się otworzyć pliku: przerwij wczytywanie pliku
+
+        // czyścimy wcześniej zapełnioną zmienną tekstową
+        tekst.clear();
+
+
+        // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
+        QTextStream stream(&plik);
+
+        // czytamy wszystkie dane
+        tekst = stream.readAll();
+
+        // umieszczamy je wewnątrz text boxa
+        ui->testTextBox->setText(tekst);
+
+        plik.close();
+}
 
 void MainWindow::on_openFileButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
 
+            open_file();
 
 }
 

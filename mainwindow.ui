@@ -14,42 +14,117 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="7" column="0">
-     <widget class="QTextEdit" name="testTextBox">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="placeholderText">
-       <string/>
-      </property>
-     </widget>
+   <widget class="QTextEdit" name="typedTextBox">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>176</y>
+      <width>511</width>
+      <height>133</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="saveButton">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>220</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&amp;Zapisz</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="charPerMinute">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>315</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="testTextBox">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>37</y>
+      <width>511</width>
+      <height>133</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="openFileButton">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>70</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&amp;Otwórz</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>40</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Tekst 1</string>
+     </property>
     </item>
-    <item row="10" column="0">
-     <widget class="QTextEdit" name="typedTextBox"/>
+    <item>
+     <property name="text">
+      <string>Tekst 2</string>
+     </property>
     </item>
-    <item row="7" column="3">
-     <widget class="QPushButton" name="openFileButton">
-      <property name="text">
-       <string>&amp;Otwórz</string>
-      </property>
-     </widget>
+    <item>
+     <property name="text">
+      <string>Tekst 3</string>
+     </property>
     </item>
-    <item row="10" column="3">
-     <widget class="QPushButton" name="saveButton">
-      <property name="text">
-       <string>&amp;Zapisz</string>
-      </property>
-     </widget>
+    <item>
+     <property name="text">
+      <string>Tekst 4</string>
+     </property>
     </item>
-    <item row="11" column="0">
-     <widget class="QLabel" name="charPerMinute">
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
+    <item>
+     <property name="text">
+      <string>Tekst 5</string>
+     </property>
     </item>
-   </layout>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -57,7 +132,7 @@
      <x>0</x>
      <y>0</y>
      <width>667</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QTime>
+#include <QTextStream>
+
 
 namespace Ui {
 class MainWindow;
