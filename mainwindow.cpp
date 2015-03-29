@@ -9,13 +9,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    counter=0; //do usuniecia gdy zmienie na dodatkowy timer!
+
+    typedTimer = new QTimer(this); //init
+
     ui->charPerMinute->setText("0.0 znaków/min");
+    ui->wordsPerMinute->setText("0.0 słów/min");
     QFile plik(":/res/res/Instrukcja.txt");
     show_text(plik);
 
     // połącznie sygnału zmiany tekstu wpisywanego z metodą obsługi błędu -> funkcja error()
     connect( ui->typedTextBox, SIGNAL(textChanged()), this, SLOT(error()));
+    // połączenie sygnału zakończenia interwału timera z metodą update
+    connect(typedTimer,SIGNAL(timeout()),this,SLOT(update()));
+
+    typedTimer->setInterval(1000); //timer odpalajacy sie co 1 sec - odświeżenie statystyk
+
 }
 
 MainWindow::~MainWindow()
@@ -25,8 +33,8 @@ MainWindow::~MainWindow()
 
 void MainWindow:: open_file(){
 
+    typedTimer->stop(); //zatrzymaj timer i odświeżanie statystyk
     QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
-
     QFile plik(fileName);
 
     show_text(plik);
@@ -37,24 +45,30 @@ void MainWindow:: open_file(){
 
 }
 
+void MainWindow::update() //interwał odświeżania statystyk
+{
+    tempLength = typedText.length(); //ilosc znakow w tekscie
+    tempTime = elapsedTime.elapsed()/60000.0; //czas ktory uplynal od rozpoczecia pisania
+    speedChar_string = QString::number(tempLength/tempTime,'f',1); //zamiana na string w formacie 0.0
+    speedChar_string += " znaków/min";
+    ui->charPerMinute->setText(speedChar_string); //do labela
+
+
+    typedWords = QString::number(numberOfTypedWords/tempTime,'f',1); //zamiana na string w formacie 0.0
+    typedWords += " słów/min";
+    ui->wordsPerMinute->setText(typedWords);
+}
+
 void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej edycji tekstu (wpisanie znaku, skasowanie)
 {
-    counter++; //nieelegancko - do poprawy
     typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
+
+    numberOfTypedWords = typedText.count(QRegExp("\\s\\S")) + 1; //wykrycie białego znaku a zaraz po nim znaku - czyli spacja
 
     if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
     {
-        elapsedTime.start();
-        /* możliwy bug - ktos popelnia blad na pierwszym znaku, cofa sie BACKSPACE, pisze 1 znak od nowa - timer startuje
-         * od nowa*/
-    }
-    if(!(counter%5)) //dokonaj update znakow/minute co 5 znakow (docelowo bedzie odswiezanie co interwal liczony innym timerem)
-    {
-        float tempLength = typedText.length(); //ilosc znakow w tekscie
-        float tempTime = elapsedTime.elapsed()/60000.0; //czas ktory uplynal od rozpoczecia pisania
-        speedChar_string = QString::number(tempLength/tempTime,'f',1); //zamiana na string w formacie 0.0
-        speedChar_string = speedChar_string + " znaków/min";
-        ui->charPerMinute->setText(speedChar_string); //do labela
+        typedTimer->start(); //interwał odświeżania statystyk
+        elapsedTime.restart(); //liczymy czas pisania od nowa
     }
 }
 
@@ -67,7 +81,7 @@ void MainWindow::show_text(QFile &file){
 
     // czyścimy wcześniej zapełnioną zmienną tekstową
     shownText.clear();
-
+    ui->typedTextBox->clear(); //czyścimy też to co wcześniej wpisaliśmy
 
     // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
     QTextStream stream(&file);
@@ -82,31 +96,43 @@ void MainWindow::show_text(QFile &file){
 
 }
 
+void MainWindow::changeShownText() //funkcja do zmiany tekstu na inny
+{
+    ui->typedTextBox->clear();
+    typedTimer->stop();
+}
+
 void MainWindow::on_textList_activated(const QString &arg1)
 {
     if(arg1=="Tekst 1"){
         QFile plik(":/res/res/Tekst 1.txt");
         show_text(plik);
+        changeShownText();
     }
     if(arg1=="Tekst 2"){
         QFile plik(":/res/res/Tekst 2.txt");
         show_text(plik);
+        changeShownText();
     }
     if(arg1=="Tekst 3"){
         QFile plik(":/res/res/Tekst 3.txt");
         show_text(plik);
+        changeShownText();
     }
     if(arg1=="Tekst 4"){
         QFile plik(":/res/res/Tekst 4.txt");
         show_text(plik);
+        changeShownText();
     }
     if(arg1=="Tekst 5"){
         QFile plik(":/res/res/Tekst 5.txt");
         show_text(plik);
+        changeShownText();
     }
     if(arg1=="Inny..."){
         open_file();
     }
+
 }
 
 //jakoś działa -> pokazuje to pomocnicze okno

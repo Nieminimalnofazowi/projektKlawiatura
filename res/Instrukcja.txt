@@ -1,4 +1,3 @@
-Niniejszy test sÅ‚uÅ¼y sprawdzeniu szybkoÅ›ci pisania na klawiaturze. 
-Rozwijana lista poniÅ¼ej zawiera teksty, ktÃ³re naleÅ¼y przepisaÄ‡. 
-Test rozpocznie siÄ™ po wpisaniu pierwszej litery. 
-JAK MASZ POMYSÅ PRZEMO, TO ZEDYTUJ TO JAKOÅš LEPIEJ ;)
+Niniejszy test s³u¿y sprawdzeniu szybkoœci pisania na klawiaturze. 
+Rozwijana lista poni¿ej zawiera teksty, które nale¿y przepisaæ. 
+Test rozpocznie siê po wpisaniu pierwszej litery.
