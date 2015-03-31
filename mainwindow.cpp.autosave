@@ -149,12 +149,12 @@ void MainWindow::error(){
  temp.chop(STL-TTL);
  if(temp==typedText){
     ui->tekstProba->setText("OK");
-
+    
  }
  else{
      ui->tekstProba->setText("Not OK");
  }
-
+    
 
 }
 

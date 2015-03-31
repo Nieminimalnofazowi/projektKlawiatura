@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QTextStream>
 #include <QRegExp>
+#include <QColor>
 
 namespace Ui {
 class MainWindow;
