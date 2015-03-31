@@ -147,22 +147,25 @@ p, li { white-space: pre-wrap; }
      </property>
     </item>
    </widget>
-   <widget class="QTextEdit" name="tekstProba">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>140</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="wordsPerMinute">
     <property name="geometry">
      <rect>
       <x>170</x>
       <y>350</y>
       <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mistakesCounter">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>350</y>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
