@@ -2,7 +2,10 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QKeyEvent>
-
+#include <cstdio>
+#include <iostream>
+#include <ncurses.h>
+using namespace::std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -157,13 +160,14 @@ void MainWindow::on_textList_activated(const QString &arg1)
 
 void MainWindow::error(){
 
+ // && QKeyEvent::key() != Qt::Key_Backspace
  //typedText.right(1).toInt()!=8
  QString temp;
  temp = shownText;
  int  STL = shownText.length();
  int TTL = typedText.length();
  temp.chop(STL-TTL);
- if(temp!=typedText && QKeyEvent::key() != Qt::Key_Backspace)
+ if(temp!=typedText )
  {
 
         ui->typedTextBox->setTextColor(Qt::red);
