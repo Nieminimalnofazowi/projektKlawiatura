@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
-
+#include <QKeyEvent>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -9,14 +9,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     typedTimer = new QTimer(this); //init
     //ui->testTextBox->set
     ui->charPerMinute->setText("0.0 znaków/min");
     ui->wordsPerMinute->setText("0.0 słów/min");
     QFile plik(":/res/res/Instrukcja.txt");
     show_text(plik);
-
+    mistakeCounter=0;
+    mistakes_string = "Błędy: ";
+    mistakes_string +=  QString::number(mistakeCounter);
+    ui->mistakesCounter->setText(mistakes_string);
     // połącznie sygnału zmiany tekstu wpisywanego z metodą obsługi błędu -> funkcja error()
     connect( ui->typedTextBox, SIGNAL(textChanged()), this, SLOT(error()));
     // połączenie sygnału zakończenia interwału timera z metodą update
@@ -70,6 +72,10 @@ void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej e
         typedTimer->start(); //interwał odświeżania statystyk
         elapsedTime.restart(); //liczymy czas pisania od nowa
     }
+
+
+
+
 }
 
 
@@ -104,57 +110,67 @@ void MainWindow::changeShownText() //funkcja do zmiany tekstu na inny
 
 void MainWindow::on_textList_activated(const QString &arg1)
 {
+
+    mistakeCounter=0;
     if(arg1=="Instrukcja"){
            QFile plik(":/res/res/Instrukcja.txt");
            show_text(plik);
+           mistakeCounter=0;
        }
 
     if(arg1=="Tekst 1"){
         QFile plik(":/res/res/Tekst 1.txt");
         show_text(plik);
         changeShownText();
+        mistakeCounter=0;
     }
     if(arg1=="Tekst 2"){
         QFile plik(":/res/res/Tekst 2.txt");
         show_text(plik);
         changeShownText();
+        mistakeCounter=0;
     }
     if(arg1=="Tekst 3"){
         QFile plik(":/res/res/Tekst 3.txt");
         show_text(plik);
         changeShownText();
+        mistakeCounter=0;
     }
     if(arg1=="Tekst 4"){
         QFile plik(":/res/res/Tekst 4.txt");
         show_text(plik);
         changeShownText();
+        mistakeCounter=0;
     }
     if(arg1=="Tekst 5"){
         QFile plik(":/res/res/Tekst 5.txt");
         show_text(plik);
         changeShownText();
+        mistakeCounter=0;
     }
     if(arg1=="Inny..."){
         open_file();
+        mistakeCounter=0;
     }
 
 }
 
-//jakoś działa -> pokazuje to pomocnicze okno
 void MainWindow::error(){
+
+ //typedText.right(1).toInt()!=8
  QString temp;
  temp = shownText;
  int  STL = shownText.length();
  int TTL = typedText.length();
  temp.chop(STL-TTL);
- if(temp==typedText){
-    ui->tekstProba->setText("OK");
+ if(temp!=typedText && QKeyEvent::key() != Qt::Key_Backspace)
+ {
 
- }
- else{
-     ui->tekstProba->setText("Not OK");
- }
-
-
+        ui->typedTextBox->setTextColor(Qt::red);
+        ++mistakeCounter;
+    }
+ mistakes_string = "Błędy: ";
+ mistakes_string +=  QString::number(mistakeCounter);
+ ui->mistakesCounter->setText(mistakes_string);
 }
 

@@ -8,7 +8,7 @@
 #include <QTextStream>
 #include <QRegExp>
 #include <QColor>
-
+#include <QTextCursor>
 namespace Ui {
 class MainWindow;
 }
@@ -36,12 +36,14 @@ private:
     QString shownText; //tekst do przepisania
     QString typedText; //tekst przepisywany
     QString speedChar_string; //np "400 znaków/min"
+    QString mistakes_string;
     QString typedWords; //np "300 słów/min"
     QTimer *typedTimer;
     bool wordCheck;
     float numberOfTypedWords;
     float tempTime;
     float tempLength;
+    int mistakeCounter;
 };
 
 
