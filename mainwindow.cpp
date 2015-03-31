@@ -84,6 +84,10 @@ void MainWindow::show_text(QFile &file){
 
 void MainWindow::on_textList_activated(const QString &arg1)
 {
+    if(arg1=="Instrukcja"){
+        QFile plik(":/res/res/Instrukcja.txt");
+        show_text(plik);
+    }
     if(arg1=="Tekst 1"){
         QFile plik(":/res/res/Tekst 1.txt");
         show_text(plik);
