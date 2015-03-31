@@ -21,8 +21,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void open_file();	 // otwieranie pliku
-    void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText
-    void changeShownText();
+    void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText + sprząta po tym co już napisano
 private slots:
 
     void on_typedTextBox_textChanged();
@@ -37,11 +36,13 @@ private:
     QString typedText; //tekst przepisywany
     QString speedChar_string; //np "400 znaków/min"
     QString typedWords; //np "300 słów/min"
+    QString statPercentage; //np "Poprawność: 90.0%"
     QTimer *typedTimer;
     bool wordCheck;
     float numberOfTypedWords;
     float tempTime;
     float tempLength;
+    int numberOfMistakes;
 };
 
 

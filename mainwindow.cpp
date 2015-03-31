@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->testTextBox->set
     ui->charPerMinute->setText("0.0 znaków/min");
     ui->wordsPerMinute->setText("0.0 słów/min");
+    ui->correctPercentage->setText("Poprawność: x %");
     QFile plik(":/res/res/Instrukcja.txt");
     show_text(plik);
 
@@ -23,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(typedTimer,SIGNAL(timeout()),this,SLOT(update()));
 
     typedTimer->setInterval(1000); //timer odpalajacy sie co 1 sec - odświeżenie statystyk
-
 }
 
 MainWindow::~MainWindow()
@@ -38,25 +38,27 @@ void MainWindow:: open_file(){
     QFile plik(fileName);
 
     show_text(plik);
-
-
-
-
-
 }
 
 void MainWindow::update() //interwał odświeżania statystyk
 {
+    //znaki na minute
     tempLength = typedText.length(); //ilosc znakow w tekscie
     tempTime = elapsedTime.elapsed()/60000.0; //czas ktory uplynal od rozpoczecia pisania
     speedChar_string = QString::number(tempLength/tempTime,'f',1); //zamiana na string w formacie 0.0
     speedChar_string += " znaków/min";
     ui->charPerMinute->setText(speedChar_string); //do labela
 
-
+    //słowa na minute
     typedWords = QString::number(numberOfTypedWords/tempTime,'f',1); //zamiana na string w formacie 0.0
     typedWords += " słów/min";
     ui->wordsPerMinute->setText(typedWords);
+
+    //poprawność
+    float currentPercentage = 100*(tempLength-numberOfMistakes)/tempLength;
+    statPercentage = QString::number(currentPercentage,'f',1);
+    statPercentage = "Poprawność: " + statPercentage + " %";
+    ui->correctPercentage->setText(statPercentage);
 }
 
 void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej edycji tekstu (wpisanie znaku, skasowanie)
@@ -76,13 +78,15 @@ void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej e
 
 void MainWindow::show_text(QFile &file){
 
+
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;			 // jeżeli nie udało się otworzyć pliku: przerwij wczytywanie pliku
 
     // czyścimy wcześniej zapełnioną zmienną tekstową
+    typedTimer->stop();
     shownText.clear();
     ui->typedTextBox->clear(); //czyścimy też to co wcześniej wpisaliśmy
-
+    numberOfMistakes = 0; //zerujemy ilość popełnionych błędów
     // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
     QTextStream stream(&file);
 
@@ -96,12 +100,6 @@ void MainWindow::show_text(QFile &file){
 
 }
 
-void MainWindow::changeShownText() //funkcja do zmiany tekstu na inny
-{
-    ui->typedTextBox->clear();
-    typedTimer->stop();
-}
-
 void MainWindow::on_textList_activated(const QString &arg1)
 {
     if(arg1=="Instrukcja"){
@@ -112,27 +110,22 @@ void MainWindow::on_textList_activated(const QString &arg1)
     if(arg1=="Tekst 1"){
         QFile plik(":/res/res/Tekst 1.txt");
         show_text(plik);
-        changeShownText();
     }
     if(arg1=="Tekst 2"){
         QFile plik(":/res/res/Tekst 2.txt");
         show_text(plik);
-        changeShownText();
     }
     if(arg1=="Tekst 3"){
         QFile plik(":/res/res/Tekst 3.txt");
         show_text(plik);
-        changeShownText();
     }
     if(arg1=="Tekst 4"){
         QFile plik(":/res/res/Tekst 4.txt");
         show_text(plik);
-        changeShownText();
     }
     if(arg1=="Tekst 5"){
         QFile plik(":/res/res/Tekst 5.txt");
         show_text(plik);
-        changeShownText();
     }
     if(arg1=="Inny..."){
         open_file();
@@ -149,12 +142,12 @@ void MainWindow::error(){
  temp.chop(STL-TTL);
  if(temp==typedText){
     ui->tekstProba->setText("OK");
-
+    
  }
  else{
      ui->tekstProba->setText("Not OK");
+     numberOfMistakes++;
  }
-
-
+    
 }
 
