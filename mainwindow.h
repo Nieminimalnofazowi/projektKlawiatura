@@ -43,11 +43,8 @@ private:
     float numberOfTypedWords;
     float tempTime;
     float tempLength;
-<<<<<<< HEAD
-    int numberOfMistakes;
-=======
     int mistakeCounter;
->>>>>>> origin/words/minute
+
 };
 
 

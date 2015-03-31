@@ -163,7 +163,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="mistakesCounter">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>480</x>
       <y>350</y>
       <width>101</width>
       <height>21</height>

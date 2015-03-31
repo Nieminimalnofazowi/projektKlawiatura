@@ -2,10 +2,6 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QKeyEvent>
-#include <cstdio>
-#include <iostream>
-#include <ncurses.h>
-using namespace::std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,7 +37,7 @@ void MainWindow:: open_file(){
     typedTimer->stop(); //zatrzymaj timer i odświeżanie statystyk
     QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
     QFile plik(fileName);
-
+    mistakeCounter=0;
     show_text(plik);
 }
 
@@ -60,7 +56,7 @@ void MainWindow::update() //interwał odświeżania statystyk
     ui->wordsPerMinute->setText(typedWords);
 
     //poprawność
-    float currentPercentage = 100*(tempLength-numberOfMistakes)/tempLength;
+    float currentPercentage = 100*(tempLength-mistakeCounter)/tempLength;
     statPercentage = QString::number(currentPercentage,'f',1);
     statPercentage = "Poprawność: " + statPercentage + " %";
     ui->correctPercentage->setText(statPercentage);
@@ -95,7 +91,7 @@ void MainWindow::show_text(QFile &file){
     typedTimer->stop();
     shownText.clear();
     ui->typedTextBox->clear(); //czyścimy też to co wcześniej wpisaliśmy
-    numberOfMistakes = 0; //zerujemy ilość popełnionych błędów
+    mistakeCounter = 0; //zerujemy ilość popełnionych błędów
     // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
     QTextStream stream(&file);
 
@@ -116,57 +112,30 @@ void MainWindow::on_textList_activated(const QString &arg1)
     if(arg1=="Instrukcja"){
            QFile plik(":/res/res/Instrukcja.txt");
            show_text(plik);
-           mistakeCounter=0;
        }
 
     if(arg1=="Tekst 1"){
         QFile plik(":/res/res/Tekst 1.txt");
         show_text(plik);
-<<<<<<< HEAD
-=======
-        changeShownText();
-        mistakeCounter=0;
->>>>>>> origin/words/minute
     }
     if(arg1=="Tekst 2"){
         QFile plik(":/res/res/Tekst 2.txt");
         show_text(plik);
-<<<<<<< HEAD
-=======
-        changeShownText();
-        mistakeCounter=0;
->>>>>>> origin/words/minute
     }
     if(arg1=="Tekst 3"){
         QFile plik(":/res/res/Tekst 3.txt");
         show_text(plik);
-<<<<<<< HEAD
-=======
-        changeShownText();
-        mistakeCounter=0;
->>>>>>> origin/words/minute
     }
     if(arg1=="Tekst 4"){
         QFile plik(":/res/res/Tekst 4.txt");
         show_text(plik);
-<<<<<<< HEAD
-=======
-        changeShownText();
-        mistakeCounter=0;
->>>>>>> origin/words/minute
     }
     if(arg1=="Tekst 5"){
         QFile plik(":/res/res/Tekst 5.txt");
         show_text(plik);
-<<<<<<< HEAD
-=======
-        changeShownText();
-        mistakeCounter=0;
->>>>>>> origin/words/minute
     }
     if(arg1=="Inny..."){
         open_file();
-        mistakeCounter=0;
     }
 
 }
@@ -180,17 +149,6 @@ void MainWindow::error(){
  int  STL = shownText.length();
  int TTL = typedText.length();
  temp.chop(STL-TTL);
-<<<<<<< HEAD
- if(temp==typedText){
-    ui->tekstProba->setText("OK");
-    
- }
- else{
-     ui->tekstProba->setText("Not OK");
-     numberOfMistakes++;
- }
-    
-=======
  if(temp!=typedText )
  {
 
@@ -200,6 +158,5 @@ void MainWindow::error(){
  mistakes_string = "Błędy: ";
  mistakes_string +=  QString::number(mistakeCounter);
  ui->mistakesCounter->setText(mistakes_string);
->>>>>>> origin/words/minute
 }
 
