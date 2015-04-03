@@ -1,3 +1,3 @@
-Niniejszy test s³u¿y sprawdzeniu szybkoœci pisania na klawiaturze. 
+Niniejszy test s³u¿y sprawdzeniu szybkoœci pisania na klawiaturze.
 Rozwijana lista poni¿ej zawiera teksty, które nale¿y przepisaæ. 
 Test rozpocznie siê po wpisaniu pierwszej litery.

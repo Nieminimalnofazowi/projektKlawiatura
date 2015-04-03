@@ -9,16 +9,19 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     typedTimer = new QTimer(this); //init
-    //ui->testTextBox->set
+
     ui->charPerMinute->setText("0.0 znaków/min");
     ui->wordsPerMinute->setText("0.0 słów/min");
     ui->correctPercentage->setText("Poprawność: x %");
+
     QFile plik(":/res/res/Instrukcja.txt");
     show_text(plik);
+
     mistakeCounter=0;
     mistakes_string = "Błędy: ";
     mistakes_string +=  QString::number(mistakeCounter);
     ui->mistakesCounter->setText(mistakes_string);
+
     // połącznie sygnału zmiany tekstu wpisywanego z metodą obsługi błędu -> funkcja error()
     connect( ui->typedTextBox, SIGNAL(textChanged()), this, SLOT(error()));
     // połączenie sygnału zakończenia interwału timera z metodą update
@@ -62,17 +65,36 @@ void MainWindow::update() //interwał odświeżania statystyk
     ui->correctPercentage->setText(statPercentage);
 }
 
+void MainWindow::mousePressEvent(QMouseEvent *)
+{
+    setFocusPolicy(Qt::ClickFocus);
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *)
+{
+    if (ui->typedTextBox->isActiveWindow())
+    {
+        typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
+        if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
+        {
+            //typedTimer->start(); //interwał odświeżania statystyk
+            elapsedTime.restart(); //liczymy czas pisania od nowa
+        }   
+            deltsVector.append(elapsedTime.elapsed());
+    }
+}
+
 void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej edycji tekstu (wpisanie znaku, skasowanie)
 {
-    typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
+    //typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
 
-    numberOfTypedWords = typedText.count(QRegExp("\\s\\S")) + 1; //wykrycie białego znaku a zaraz po nim znaku - czyli spacja
+    //numberOfTypedWords = typedText.count(QRegExp("\\s\\S")) + 1; //wykrycie białego znaku a zaraz po nim znaku - czyli spacja
 
-    if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
+    /*if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
     {
         typedTimer->start(); //interwał odświeżania statystyk
         elapsedTime.restart(); //liczymy czas pisania od nowa
-    }
+    }*/
 
 
 
@@ -160,3 +182,15 @@ void MainWindow::error(){
  ui->mistakesCounter->setText(mistakes_string);
 }
 
+
+void MainWindow::on_saveButton_clicked()
+{
+    QFile plikWynikowy(":/res/res/Results.txt");
+    plikWynikowy.open(QIODevice::WriteOnly);
+    QTextStream out(&plikWynikowy);
+    for (int i=0 ; i<deltsVector.length() ; i++)
+    {
+        out << deltsVector[i];
+    }
+    plikWynikowy.close();
+}

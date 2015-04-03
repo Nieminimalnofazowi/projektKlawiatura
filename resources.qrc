@@ -1,10 +1,11 @@
 <RCC>
     <qresource prefix="/res">
-	<file>res/Instrukcja.txt</file>
+        <file>res/Instrukcja.txt</file>
         <file>res/Tekst 1.txt</file>
         <file>res/Tekst 2.txt</file>
         <file>res/Tekst 3.txt</file>
         <file>res/Tekst 4.txt</file>
         <file>res/Tekst 5.txt</file>
+        <file>res/Results.txt</file>
     </qresource>
 </RCC>
