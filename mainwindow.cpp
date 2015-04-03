@@ -81,6 +81,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *)
             elapsedTime.restart(); //liczymy czas pisania od nowa
         }   
             deltsVector.append(elapsedTime.elapsed());
+
     }
 }
 
@@ -186,9 +187,10 @@ void MainWindow::error(){
 void MainWindow::on_saveButton_clicked()
 {
     QFile plikWynikowy(":/res/res/Results.txt");
-    plikWynikowy.open(QIODevice::WriteOnly);
+    if(!plikWynikowy.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
     QTextStream out(&plikWynikowy);
-    for (int i=0 ; i<deltsVector.length() ; i++)
+    for (int i=0 ; i<deltsVector.size() ; i++)
     {
         out << deltsVector[i];
     }

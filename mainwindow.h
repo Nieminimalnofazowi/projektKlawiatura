@@ -10,6 +10,7 @@
 #include <QColor>
 #include <QTextCursor>
 #include <QVector>
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
