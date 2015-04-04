@@ -11,6 +11,7 @@
 #include <QTextCursor>
 #include <QVector>
 #include <QDebug>
+#include <QFile>
 
 namespace Ui {
 class MainWindow;

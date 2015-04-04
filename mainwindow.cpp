@@ -65,11 +65,20 @@ void MainWindow::update() //interwał odświeżania statystyk
     ui->correctPercentage->setText(statPercentage);
 }
 
+/*
+ * Metoda ktorej celem jest ustawienie focus na klawiature. Pozwala
+ * na "przeniesienie" scope'a keyReleaseEvent z klasy QWidget na MainWindow
+ * source: stackoverflow :))
+ */
 void MainWindow::mousePressEvent(QMouseEvent *)
 {
     setFocusPolicy(Qt::ClickFocus);
 }
 
+/*
+ * Uruchamiana po puszczeniu klawisza. zapelnia wektor z elementami
+ * typu integer timestampami
+ */
 void MainWindow::keyReleaseEvent(QKeyEvent *)
 {
     if (ui->typedTextBox->isActiveWindow())
@@ -78,14 +87,21 @@ void MainWindow::keyReleaseEvent(QKeyEvent *)
         if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
         {
             //typedTimer->start(); //interwał odświeżania statystyk
-            elapsedTime.restart(); //liczymy czas pisania od nowa
+            elapsedTime.start(); //liczymy czas pisania
         }   
             deltsVector.append(elapsedTime.elapsed());
-
+            //poniższy kod sluzy sprawdzeniu zawartosci vectora
+            int temp = deltsVector[deltsVector.size()-1];
+            QString TString = QString::number(temp,10);
+            ui->correctPercentage->setText(TString);
+            //wyglada na to ze dziala!
     }
 }
 
-void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej edycji tekstu (wpisanie znaku, skasowanie)
+/*
+ * Czy bedzie jeszcze potrzebna?? zwijam poki co
+ */
+void MainWindow::on_typedTextBox_textChanged()
 {
     //typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
 
@@ -96,15 +112,12 @@ void MainWindow::on_typedTextBox_textChanged() //metoda wywolywana przy kazdej e
         typedTimer->start(); //interwał odświeżania statystyk
         elapsedTime.restart(); //liczymy czas pisania od nowa
     }*/
-
-
-
-
 }
 
 
 
-void MainWindow::show_text(QFile &file){
+void MainWindow::show_text(QFile &file)
+{
 
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -186,13 +199,16 @@ void MainWindow::error(){
 
 void MainWindow::on_saveButton_clicked()
 {
-    QFile plikWynikowy(":/res/res/Results.txt");
+    //plik tworzy mi sie tylko jak dodam C:\\
+    //samo Results.txt albo /res/res/Results nie działa!!
+    //Windows bug?
+    QFile plikWynikowy("C:\\Results.txt");
     if(!plikWynikowy.open(QIODevice::WriteOnly | QIODevice::Text))
         return;
     QTextStream out(&plikWynikowy);
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
-        out << deltsVector[i];
+        out << deltsVector[i] << " ";
     }
     plikWynikowy.close();
 }
