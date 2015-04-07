@@ -28,6 +28,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(typedTimer,SIGNAL(timeout()),this,SLOT(update()));
 
     typedTimer->setInterval(1000); //timer odpalajacy sie co 1 sec - odświeżenie statystyk
+
+    ui->typedTextBox->installEventFilter(this);
+    mistake_flag=0;
+
+
 }
 
 MainWindow::~MainWindow()
@@ -178,19 +183,23 @@ void MainWindow::on_textList_activated(const QString &arg1)
 
 void MainWindow::error(){
 
- // && QKeyEvent::key() != Qt::Key_Backspace
- //typedText.right(1).toInt()!=8
  QString temp;
  temp = shownText;
  int  STL = shownText.length();
  int TTL = typedText.length();
  temp.chop(STL-TTL);
- if(temp!=typedText )
+
+ if(temp==typedText) mistake_flag=0;
+ if(temp!=typedText && backspace_flag!=0)
  {
 
-        ui->typedTextBox->setTextColor(Qt::red);
         ++mistakeCounter;
-    }
+
+        mistake_flag=1;
+
+
+ }
+ else if(temp==typedText) mistake_flag=0;
  mistakes_string = "Błędy: ";
  mistakes_string +=  QString::number(mistakeCounter);
  ui->mistakesCounter->setText(mistakes_string);
@@ -211,4 +220,24 @@ void MainWindow::on_saveButton_clicked()
         out << deltsVector[i] << " ";
     }
     plikWynikowy.close();
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *e){
+
+    if(e->type() == QEvent::KeyPress ){
+           QKeyEvent * ke = static_cast<QKeyEvent * >(e);
+        if(ke->key()==Qt::Key_Backspace) {
+
+            backspace_flag =0;
+            return 0;
+        }
+        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 )
+        {
+            //mistake_flag=0;
+            return 1;}
+        else{backspace_flag=1; return 0;}
+
+
+    }
+
 }

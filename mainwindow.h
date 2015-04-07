@@ -35,6 +35,7 @@ private slots:
     void update();
     void on_saveButton_clicked();
 
+    bool eventFilter(QObject *watched, QEvent *e);
 private:
     Ui::MainWindow *ui;
     QTime elapsedTime; //czas od rozpoczecia przepisywania
@@ -52,6 +53,9 @@ private:
     float tempLength;
     int mistakeCounter;
     int *key;
+    bool backspace_flag; // ustawiana gdy wciśnięty backspace
+    bool mistake_flag;
+
 };
 
 
