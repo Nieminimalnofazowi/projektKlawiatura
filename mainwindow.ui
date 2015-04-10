@@ -19,7 +19,7 @@
    <string>Dynamika pisania</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTextEdit" name="typedTextBox">
+   <widget class="TypedTextEdit" name="typedTextBox">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -300,6 +300,19 @@ p, li { white-space: pre-wrap; }
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>TypedTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>typedtextedit.h</header>
+   <slots>
+    <slot>userTypedWrongCharacter()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
+ <slots>
+  <signal>wrongCharacterTyped()</signal>
+ </slots>
 </ui>
