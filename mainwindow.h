@@ -69,7 +69,6 @@ private:
 
     QString NewUserName;
     QVector<user*> UserList;
-    void updateComboBox(QComboBox *comboToUpdate, const QVector<user*> & list );
     QString activeUserString;
     QFile* statsFile;
 };

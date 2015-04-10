@@ -321,24 +321,12 @@ void MainWindow::on_pushButton_clicked()
         userFile.close();
 
     }
-    // lamersko, może cały wektor mu dać?
     ui->UserListCombo->addItem(NewUserName);
     ui->UserListCombo->update();
     QMessageBox::information(this,"Wiadomość","Dodano użytkownika: " + NewUserName);
     ui->UserName->clear();
-    //for(int i=0; i<=UserList.size();i++)
-    //ui->testwindow->setText(UserList[i]->userID );
 
-    ui->testwindow->setText(UserList[0]->userID);
 
 }
 
 
-
-void MainWindow::updateComboBox(QComboBox *comboToUpdate, const QVector<user*> & list )
-{
-    /*QString currentText = comboToUpdate->currentText();
-    comboToUpdate->clear();
-    comboToUpdate->insertItems(list);
-    comboToUpdate->setCurrentIndex(comboToUpdate->findText(currentText));*/
-}

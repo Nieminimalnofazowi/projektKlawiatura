@@ -250,16 +250,6 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
    </widget>
-   <widget class="QTextEdit" name="testwindow">
-    <property name="geometry">
-     <rect>
-      <x>570</x>
-      <y>210</y>
-      <width>171</width>
-      <height>141</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="activeUser">
     <property name="geometry">
      <rect>
