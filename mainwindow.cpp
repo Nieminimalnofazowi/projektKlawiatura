@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -26,10 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
    // connect( ui->typedTextBox, SIGNAL(textChanged()), this, SLOT(error()));
     // połączenie sygnału zakończenia interwału timera z metodą update
     connect(typedTimer,SIGNAL(timeout()),this,SLOT(update()));
+    connect(ui->typedTextBox, SIGNAL(textChanged(isBackspace)), this, SLOT(on_typedTextBox_textChanged(isBackspace)));
 
     typedTimer->setInterval(1000); //timer odpalajacy sie co 1 sec - odświeżenie statystyk
 
-    ui->typedTextBox->installEventFilter(this);
+//    ui->typedTextBox->installEventFilter(this);
     mistake_flag=0;
     activeUserString= "Bieżący użytkownik to: \n";
     ui->activeUser->setText(activeUserString );
@@ -90,29 +92,29 @@ void MainWindow::mousePressEvent(QMouseEvent *)
  * Uruchamiana po puszczeniu klawisza. zapelnia wektor z elementami
  * typu integer timestampami
  */
-void MainWindow::keyPressEvent(QKeyEvent *)
+void MainWindow::keyReleaseEvent(QKeyEvent *)
 {
-    if (ui->typedTextBox->isActiveWindow())
-    {
-        typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
-        if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
-        {
-            //typedTimer->start(); //interwał odświeżania statystyk
-            elapsedTime.start(); //liczymy czas pisania
-        }   
-        deltsVector.append(elapsedTime.elapsed());
-        //poniższy kod sluzy sprawdzeniu zawartosci vectora
-        int temp = deltsVector[deltsVector.size()-1];
-        QString TString = QString::number(temp,10);
-        ui->correctPercentage->setText(TString);
-        //wyglada na to ze dziala!
-    }
+//    if (ui->typedTextBox->isActiveWindow())
+//    {
+//        typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
+//        if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
+//        {
+//            //typedTimer->start(); //interwał odświeżania statystyk
+//            elapsedTime.start(); //liczymy czas pisania
+//        }
+//        deltsVector.append(elapsedTime.elapsed());
+//        //poniższy kod sluzy sprawdzeniu zawartosci vectora
+//        int temp = deltsVector[deltsVector.size()-1];
+//        QString TString = QString::number(temp,10);
+//        ui->correctPercentage->setText(TString);
+//        //wyglada na to ze dziala!
+//    }
 }
 
 /*
  * Czy bedzie jeszcze potrzebna?? zwijam poki co
  */
-void MainWindow::on_typedTextBox_textChanged()
+void MainWindow::on_typedTextBox_textChanged(bool isBackspace)
 {
     //typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
 
@@ -126,22 +128,27 @@ void MainWindow::on_typedTextBox_textChanged()
 
     //QString temp;
     //temp = shownText;
+    QString typedText = ui->typedTextBox->toPlainText();
     int STL = shownText.length();
     int TTL = typedText.length();
     //temp.chop(STL-TTL);
 
+//    qDebug() << 'blad';
     if(shownText.left(TTL)==typedText ) mistake_flag=0;
     if(typedText.isEmpty()) mistake_flag=0;
-    if(shownText.left(TTL)!=typedText && backspace_flag!=0)
+    if(shownText.left(TTL)!=typedText && !isBackspace)
     {
-
            ++mistakeCounter;
 
            mistake_flag=1;
-
+        emit wrongCharacterTyped();
 
     }
-    else if(shownText.left(TTL)==typedText) mistake_flag=0;
+    else if(shownText.left(TTL)==typedText){
+        mistake_flag=0;
+        emit correctCharacterTyped();
+    }
+
     mistakes_string = "Błędy: ";
     mistakes_string +=  QString::number(mistakeCounter);
     ui->mistakesCounter->setText(mistakes_string);
@@ -256,27 +263,27 @@ void MainWindow::on_saveButton_clicked()
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *e){
 
-    if(e->type() == QEvent::KeyPress )
-    {
-        QKeyEvent * ke = static_cast<QKeyEvent * >(e);
-        if(ke->key()==Qt::Key_Backspace)
-        {
+//    if(e->type() == QEvent::KeyPress )
+//    {
+//        QKeyEvent * ke = static_cast<QKeyEvent * >(e);
+//        if(ke->key()==Qt::Key_Backspace)
+//        {
 
-            backspace_flag =0;
-            return 0;
-        }
-        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
-        {
-            return 1;
-        }
-        else
-        {
-            backspace_flag=1;
-            return 0;
-        }
+//            backspace_flag =0;
+//            return 0;
+//        }
+//        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
+//        {
+//            return 1;
+//        }
+//        else
+//        {
+//            backspace_flag=1;
+//            return 0;
+//        }
 
 
-    }
+//    }
 
 }
 

@@ -311,5 +311,29 @@ p, li { white-space: pre-wrap; }
   </customwidget>
  </customwidgets>
  <resources/>
+<<<<<<< Updated upstream
  <connections/>
+=======
+ <connections>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>wrongCharacterTyped()</signal>
+   <receiver>typedTextBox</receiver>
+   <slot>userTypedWrongCharacter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>187</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>259</x>
+     <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+>>>>>>> Stashed changes
+ <slots>
+  <signal>wrongCharacterTyped()</signal>
+ </slots>
 </ui>
