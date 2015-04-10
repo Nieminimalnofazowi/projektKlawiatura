@@ -5,6 +5,7 @@
 -Zapis danych do .xls (aktualnie do .txt - przemyslec to)
 
 
+
 -Obróbka tych danych później (np skrypt w matlabie wyliczający te średnie, które teraz bez sensu mamy w programie w labelach)
 
 
@@ -17,3 +18,5 @@
 -Użytkownicy z listy + dodawanie nowych. Implementacja zależna od nas? (pierwszy szkic klasy DONE
 
 -KROTSZE TEXTY DONE
+
+--- Dodałem pominięcie backspace i blokadę podczas pisania z błędem, ale jeszcze jest problem z tym, że nie bierze pod uwagę pierwszej źle wpisanej litery... 
