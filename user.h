@@ -19,9 +19,10 @@ public:
     bool saveStats(QVector<int> currentSessionStats);
     //zapis calosci do pliku (?)
     bool saveStatsToFile();
+    QString userID;
 private:
     //np imie i nazwisko, nick
-    QString userID;
+
     //vector vectorow int -> aby user mogl wypelnic test kilka razy
     QVector< QVector<int> > stats;
 

@@ -12,7 +12,9 @@
 #include <QVector>
 #include <QDebug>
 #include <QFile>
-
+#include <user.h>
+#include <QComboBox>
+#include <QPushButton>
 namespace Ui {
 class MainWindow;
 }
@@ -27,7 +29,7 @@ public:
     void open_file();	 // otwieranie pliku
     void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText + sprząta po tym co już napisano
 private slots:
-    void keyReleaseEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void on_typedTextBox_textChanged();
     void on_textList_activated(const QString &arg1);
@@ -36,6 +38,14 @@ private slots:
     void on_saveButton_clicked();
 
     bool eventFilter(QObject *watched, QEvent *e);
+    void on_comboBox_activated(const QString &arg1);
+
+    void on_UserListCombo_activated(const QString &arg1);
+
+    void on_pushButton_clicked();
+
+    void on_UserName_textChanged();
+
 private:
     Ui::MainWindow *ui;
     QTime elapsedTime; //czas od rozpoczecia przepisywania
@@ -56,6 +66,11 @@ private:
     bool backspace_flag; // ustawiana gdy wciśnięty backspace
     bool mistake_flag;
 
+
+    QString NewUserName;
+    QVector<user*> UserList;
+    void updateComboBox(QComboBox *comboToUpdate, const QVector<user*> & list );
+    QString activeUserString;
 };
 
 

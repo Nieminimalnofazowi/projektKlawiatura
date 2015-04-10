@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QKeyEvent>
-
+#include <QMessageBox>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mistakesCounter->setText(mistakes_string);
 
     // połącznie sygnału zmiany tekstu wpisywanego z metodą obsługi błędu -> funkcja error()
-    connect( ui->typedTextBox, SIGNAL(textChanged()), this, SLOT(error()));
+   // connect( ui->typedTextBox, SIGNAL(textChanged()), this, SLOT(error()));
     // połączenie sygnału zakończenia interwału timera z metodą update
     connect(typedTimer,SIGNAL(timeout()),this,SLOT(update()));
 
@@ -31,6 +31,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->typedTextBox->installEventFilter(this);
     mistake_flag=0;
+    activeUserString= "Bieżący użytkownik to: \n";
+    ui->activeUser->setText(activeUserString );
+
+    // na razie tutaj dodam vector userów
+
+    QVector<user*>* UserList = new QVector<user*>();
 
 
 }
@@ -84,7 +90,7 @@ void MainWindow::mousePressEvent(QMouseEvent *)
  * Uruchamiana po puszczeniu klawisza. zapelnia wektor z elementami
  * typu integer timestampami
  */
-void MainWindow::keyReleaseEvent(QKeyEvent *)
+void MainWindow::keyPressEvent(QKeyEvent *)
 {
     if (ui->typedTextBox->isActiveWindow())
     {
@@ -94,12 +100,12 @@ void MainWindow::keyReleaseEvent(QKeyEvent *)
             //typedTimer->start(); //interwał odświeżania statystyk
             elapsedTime.start(); //liczymy czas pisania
         }   
-            deltsVector.append(elapsedTime.elapsed());
-            //poniższy kod sluzy sprawdzeniu zawartosci vectora
-            int temp = deltsVector[deltsVector.size()-1];
-            QString TString = QString::number(temp,10);
-            ui->correctPercentage->setText(TString);
-            //wyglada na to ze dziala!
+        deltsVector.append(elapsedTime.elapsed());
+        //poniższy kod sluzy sprawdzeniu zawartosci vectora
+        int temp = deltsVector[deltsVector.size()-1];
+        QString TString = QString::number(temp,10);
+        ui->correctPercentage->setText(TString);
+        //wyglada na to ze dziala!
     }
 }
 
@@ -117,6 +123,31 @@ void MainWindow::on_typedTextBox_textChanged()
         typedTimer->start(); //interwał odświeżania statystyk
         elapsedTime.restart(); //liczymy czas pisania od nowa
     }*/
+
+    //QString temp;
+    //temp = shownText;
+    int STL = shownText.length();
+    int TTL = typedText.length();
+    //temp.chop(STL-TTL);
+
+    if(shownText.left(TTL)==typedText ) mistake_flag=0;
+    if(typedText.isEmpty()) mistake_flag=0;
+    if(shownText.left(TTL)!=typedText && backspace_flag!=0)
+    {
+
+           ++mistakeCounter;
+
+           mistake_flag=1;
+
+
+    }
+    else if(shownText.left(TTL)==typedText) mistake_flag=0;
+    mistakes_string = "Błędy: ";
+    mistakes_string +=  QString::number(mistakeCounter);
+    ui->mistakesCounter->setText(mistakes_string);
+
+
+
 }
 
 
@@ -189,7 +220,8 @@ void MainWindow::error(){
  int TTL = typedText.length();
  temp.chop(STL-TTL);
 
- if(temp==typedText) mistake_flag=0;
+ if(temp==typedText ) mistake_flag=0;
+ if(typedText.isEmpty()) mistake_flag=0;
  if(temp!=typedText && backspace_flag!=0)
  {
 
@@ -224,20 +256,66 @@ void MainWindow::on_saveButton_clicked()
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *e){
 
-    if(e->type() == QEvent::KeyPress ){
-           QKeyEvent * ke = static_cast<QKeyEvent * >(e);
-        if(ke->key()==Qt::Key_Backspace) {
+    if(e->type() == QEvent::KeyPress )
+    {
+        QKeyEvent * ke = static_cast<QKeyEvent * >(e);
+        if(ke->key()==Qt::Key_Backspace)
+        {
 
             backspace_flag =0;
             return 0;
         }
-        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 )
+        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
         {
-            //mistake_flag=0;
-            return 1;}
-        else{backspace_flag=1; return 0;}
+            return 1;
+        }
+        else
+        {
+            backspace_flag=1;
+            return 0;
+        }
 
 
     }
 
+}
+
+
+
+void MainWindow::on_UserListCombo_activated(const QString &arg1)
+{
+      ui->activeUser->setText(activeUserString + arg1);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+
+
+    NewUserName = ui->UserName->toPlainText();
+
+    if(!NewUserName.isEmpty()){
+
+        UserList.append(new user(NewUserName));
+
+    }
+    // lamersko, może cały wektor mu dać?
+    ui->UserListCombo->addItem(NewUserName);
+    ui->UserListCombo->update();
+    QMessageBox::information(this,"Wiadomość","Dodano użytkownika: " + NewUserName);
+    ui->UserName->clear();
+    //for(int i=0; i<=UserList.size();i++)
+    //ui->testwindow->setText(UserList[i]->userID );
+
+    ui->testwindow->setText(UserList[0]->userID);
+
+}
+
+
+
+void MainWindow::updateComboBox(QComboBox *comboToUpdate, const QVector<user*> & list )
+{
+    /*QString currentText = comboToUpdate->currentText();
+    comboToUpdate->clear();
+    comboToUpdate->insertItems(list);
+    comboToUpdate->setCurrentIndex(comboToUpdate->findText(currentText));*/
 }
