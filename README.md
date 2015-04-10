@@ -19,4 +19,11 @@
 
 -KROTSZE TEXTY DONE
 
---- Dodałem pominięcie backspace i blokadę podczas pisania z błędem, ale jeszcze jest problem z tym, że nie bierze pod uwagę pierwszej źle wpisanej litery... 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+UPDATE 10.04.2015
+Przypominam, katalog "users" w katalogu wykonwaczym
+Pomyśleć o tych błędach i liczniku 
+W konstruktorze MainWindow masz dodanie tego katalogu users, foreach ogarnia listę elementów z .txt, a combo dostaje je bez 4 ostatnich znaków, czyli właśnie .txt -> sam userID
+Jednocześnie on_UserListCombo_activated daje nam string z aktualnie wybranym userem np Jan Nowak i ustawia jako plik do zapisu Jan Nowak.txt
+on_pushButton_clicked() dodaje usera 
+MIŁEJ ZABWY! 
