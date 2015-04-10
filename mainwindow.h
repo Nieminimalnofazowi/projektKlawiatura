@@ -29,7 +29,7 @@ public:
     void open_file();	 // otwieranie pliku
     void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText + sprząta po tym co już napisano
 private slots:
-    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void on_typedTextBox_textChanged();
     void on_textList_activated(const QString &arg1);
@@ -71,6 +71,7 @@ private:
     QVector<user*> UserList;
     void updateComboBox(QComboBox *comboToUpdate, const QVector<user*> & list );
     QString activeUserString;
+    QFile* statsFile;
 };
 
 

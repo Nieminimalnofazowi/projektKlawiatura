@@ -5,7 +5,8 @@
 #include <QMessageBox>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    statsFile(NULL)
 {
     ui->setupUi(this);
     typedTimer = new QTimer(this); //init
@@ -38,7 +39,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QVector<user*>* UserList = new QVector<user*>();
 
-
+    QDir directory("users/");
+    if(!directory.exists());
+    {
+//        TODO
+//        QDir::mkdir("users/");
+    }
+    foreach(QString userName, directory.entryList(QStringList("*.txt")))
+    {
+        ui->UserListCombo->addItem(userName.left(userName.length() - 4));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -90,7 +100,7 @@ void MainWindow::mousePressEvent(QMouseEvent *)
  * Uruchamiana po puszczeniu klawisza. zapelnia wektor z elementami
  * typu integer timestampami
  */
-void MainWindow::keyPressEvent(QKeyEvent *)
+void MainWindow::keyReleaseEvent(QKeyEvent *)
 {
     if (ui->typedTextBox->isActiveWindow())
     {
@@ -243,15 +253,11 @@ void MainWindow::on_saveButton_clicked()
     //plik tworzy mi sie tylko jak dodam C:\\
     //samo Results.txt albo /res/res/Results nie działa!!
     //Windows bug?
-    QFile plikWynikowy("C:\\Results.txt");
-    if(!plikWynikowy.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-    QTextStream out(&plikWynikowy);
+    QTextStream out(this->statsFile);
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
         out << deltsVector[i] << " ";
     }
-    plikWynikowy.close();
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *e){
@@ -285,6 +291,17 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *e){
 void MainWindow::on_UserListCombo_activated(const QString &arg1)
 {
       ui->activeUser->setText(activeUserString + arg1);
+      if(this->statsFile != NULL)
+      {
+          if(this->statsFile->isOpen())
+          {
+              this->statsFile->close();
+          }
+      }
+      this->statsFile = new QFile(QString("users/%0.txt").arg(arg1));
+      if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Text))
+          return;
+
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -296,6 +313,12 @@ void MainWindow::on_pushButton_clicked()
     if(!NewUserName.isEmpty()){
 
         UserList.append(new user(NewUserName));
+        QFile userFile(QString("users/%0.txt").arg(NewUserName));
+        if(!userFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+
+        }
+        userFile.close();
 
     }
     // lamersko, może cały wektor mu dać?
