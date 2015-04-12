@@ -10,8 +10,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     QFile plik(":/res/res/Instrukcja.txt");
     show_text(plik); //pokaz instrukcje
+
+    ui->typedTextBox->hide();
 
     mistakeCounter=0;
     mistakes_string = "Błędy: ";
@@ -74,7 +77,7 @@ void MainWindow::mousePressEvent(QMouseEvent *)
  * Uruchamiana po puszczeniu klawisza. zapelnia wektor z elementami
  * typu integer timestampami
  */
-void MainWindow::keyReleaseEvent(QKeyEvent *key)
+void MainWindow::keyReleaseEvent(QKeyEvent *)
 {
     if (ui->typedTextBox->hasFocus())
     {
@@ -87,6 +90,33 @@ void MainWindow::keyReleaseEvent(QKeyEvent *key)
         {
             deltsVector.append(elapsedTime.elapsed());
         }   
+
+        int TTL = typedText.length();
+        //temp.chop(STL-TTL);
+
+        if(shownText.left(TTL)==typedText ) mistake_flag=0;
+        if(typedText.isEmpty()) mistake_flag=0;
+        if(shownText.left(TTL)!=typedText && backspace_flag!=0)
+        {
+
+               ++mistakeCounter;
+                typedText.insert(typedText.length()-1,redColour);
+
+                ui->typedTextBox->setText(typedText);
+                ui->typedTextBox->setTextCursor(tmpCursor);
+                /*typedText.insert(typedText.length(),blackColour);
+                ui->typedTextBox->setText(typedText);
+                ui->typedTextBox->setTextCursor(tmpCursor);*/
+               mistake_flag=1;
+
+
+        }
+        else if(shownText.left(TTL)==typedText) mistake_flag=0;
+        mistakes_string = "Błędy: ";
+        mistakes_string +=  QString::number(mistakeCounter);
+        ui->mistakesCounter->setText(mistakes_string);
+
+
     }
 }
 /*
@@ -107,31 +137,6 @@ void MainWindow::on_typedTextBox_textChanged()
 
     //QString temp;
     //temp = shownText;
-    int STL = shownText.length();
-    int TTL = typedText.length();
-    //temp.chop(STL-TTL);
-
-    if(shownText.left(TTL)==typedText ) mistake_flag=0;
-    if(typedText.isEmpty()) mistake_flag=0;
-    if(shownText.left(TTL)!=typedText && backspace_flag!=0)
-    {
-
-           ++mistakeCounter;
-            /*typedText.insert(typedText.length()-1,redColour);
-
-            ui->typedTextBox->setText(typedText);
-            ui->typedTextBox->setTextCursor(tmpCursor);
-            typedText.insert(typedText.length(),blackColour);
-            ui->typedTextBox->setText(typedText);
-            ui->typedTextBox->setTextCursor(tmpCursor);*/
-           mistake_flag=1;
-
-
-    }
-    else if(shownText.left(TTL)==typedText) mistake_flag=0;
-    mistakes_string = "Błędy: ";
-    mistakes_string +=  QString::number(mistakeCounter);
-    ui->mistakesCounter->setText(mistakes_string);
 
 
 
@@ -145,7 +150,7 @@ void MainWindow::on_typedTextBox_textChanged()
  */
 void MainWindow::show_text(QFile &file)
 {
-
+    ui->typedTextBox->show();
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;			 // jeżeli nie udało się otworzyć pliku: przerwij wczytywanie pliku
@@ -248,7 +253,7 @@ void MainWindow::on_saveButton_clicked()
         QMessageBox::information(this,"Zapis","Zapis zakończony powodzeniem!");
 }
 
-bool MainWindow::eventFilter(QObject *watched, QEvent *e){
+bool MainWindow::eventFilter(QObject *, QEvent *e){
 
     if(e->type() == QEvent::KeyPress )
     {
@@ -311,12 +316,12 @@ void MainWindow::on_pushButton_clicked()
 
         }
         userFile.close();
-
+        ui->UserListCombo->addItem(NewUserName); //dodanie nowego usera do combolisty
+        ui->UserListCombo->update(); //update combo
+        QMessageBox::information(this,"Wiadomość","Dodano użytkownika: " + NewUserName);
+        ui->UserName->clear(); //clear LineEdit
     }
-    ui->UserListCombo->addItem(NewUserName); //dodanie nowego usera do combolisty
-    ui->UserListCombo->update(); //update combo
-    QMessageBox::information(this,"Wiadomość","Dodano użytkownika: " + NewUserName);
-    ui->UserName->clear(); //clear LineEdit
+
 
 
 }
@@ -327,6 +332,9 @@ void MainWindow::on_resetButton_clicked()
 {
     ui->typedTextBox->clear(); //czyścimy też to co wcześniej wpisaliśmy
     mistakeCounter = 0; //zerujemy ilość popełnionych błędów
+    mistakes_string = "Błędy: ";
+    mistakes_string +=  QString::number(mistakeCounter);
+    ui->mistakesCounter->setText(mistakes_string);
     deltsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych timestampow
     elapsedTime.restart(); //restart milisekund
     mistake_flag=0; //flaga na 0

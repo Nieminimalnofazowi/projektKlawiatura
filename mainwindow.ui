@@ -137,7 +137,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="mistakesCounter">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>570</x>
       <y>270</y>
       <width>101</width>
       <height>21</height>
@@ -161,19 +161,6 @@ p, li { white-space: pre-wrap; }
       <string>Wybierz:</string>
      </property>
     </item>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>570</x>
-      <y>10</y>
-      <width>161</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Wybierz użytkownika:</string>
-    </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
@@ -237,6 +224,46 @@ p, li { white-space: pre-wrap; }
      <string>Reset</string>
     </property>
    </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>0</y>
+      <width>211</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Użytkownicy</string>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Wybierz użytkownika:</string>
+     </property>
+    </widget>
+    <zorder>activeUser</zorder>
+    <zorder>label</zorder>
+   </widget>
+   <zorder>groupBox</zorder>
+   <zorder>typedTextBox</zorder>
+   <zorder>saveButton</zorder>
+   <zorder>testTextBox</zorder>
+   <zorder>textList</zorder>
+   <zorder>mistakesCounter</zorder>
+   <zorder>UserListCombo</zorder>
+   <zorder>label_2</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>UserName</zorder>
+   <zorder>activeUser</zorder>
+   <zorder>resetButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

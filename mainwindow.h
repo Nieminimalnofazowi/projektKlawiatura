@@ -29,14 +29,14 @@ public:
     void open_file();	 // otwieranie pliku gdy wybrano "Inny.."
     void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText + sprząta po tym co już napisano
 private slots:
-    void keyReleaseEvent(QKeyEvent *key); //obsluguje wszystko co wydarza sie po puszczeniu klawisza
+    void keyReleaseEvent(QKeyEvent *); //obsluguje wszystko co wydarza sie po puszczeniu klawisza
     void mousePressEvent(QMouseEvent *event); //wymagana do ustawienia focusa
     void on_typedTextBox_textChanged(); //gdy cos wpisano/skasowano
     void on_textList_activated(const QString &arg1); //rozwiniecie listy tekstow do przepisania
     void error(); //error ??
     void on_saveButton_clicked(); //przycisk zapisz wyniki testu
 
-    bool eventFilter(QObject *watched, QEvent *e); //filter eventow (nie liczenie bckspc)
+    bool eventFilter(QObject *, QEvent *e); //filter eventow (nie liczenie bckspc)
 
     void on_UserListCombo_activated(const QString &arg1); //rozwiniecie listy userow
 
