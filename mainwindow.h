@@ -26,49 +26,39 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void open_file();	 // otwieranie pliku
+    void open_file();	 // otwieranie pliku gdy wybrano "Inny.."
     void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText + sprząta po tym co już napisano
 private slots:
-    void keyReleaseEvent(QKeyEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void on_typedTextBox_textChanged();
-    void on_textList_activated(const QString &arg1);
-    void error();
-    void update();
-    void on_saveButton_clicked();
+    void keyReleaseEvent(QKeyEvent *event); //obsluguje wszystko co wydarza sie po puszczeniu klawisza
+    void mousePressEvent(QMouseEvent *event); //wymagana do ustawienia focusa
+    void on_typedTextBox_textChanged(); //gdy cos wpisano/skasowano
+    void on_textList_activated(const QString &arg1); //rozwiniecie listy tekstow do przepisania
+    void error(); //error ??
+    void on_saveButton_clicked(); //przycisk zapisz wyniki testu
 
-    bool eventFilter(QObject *watched, QEvent *e);
+    bool eventFilter(QObject *watched, QEvent *e); //filter eventow (nie liczenie bckspc)
 
-    void on_UserListCombo_activated(const QString &arg1);
+    void on_UserListCombo_activated(const QString &arg1); //rozwiniecie listy userow
 
-    void on_pushButton_clicked();
+    void on_pushButton_clicked(); //wcisniecie przycisku Dodaj (usera)
 
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui; //wskaznik do elementow ui
     QTime elapsedTime; //czas od rozpoczecia przepisywania
     QString shownText; //tekst do przepisania
     QString typedText; //tekst przepisywany
-    QString speedChar_string; //np "400 znaków/min"
-    QString mistakes_string;
-    QString typedWords; //np "300 słów/min"
-    QString statPercentage; //np "Poprawność: 90.0%"
-    QVector<int> deltsVector;
-    QTimer *typedTimer;
-    bool wordCheck;
-    float numberOfTypedWords;
-    float tempTime;
-    float tempLength;
-    int mistakeCounter;
-    int *key;
+    QString mistakes_string; //string dot. bledow (label)
+    QVector<int> deltsVector; //vector tzw "delt" czyli milisekund od pierwszego znaku
+    int mistakeCounter; //licznik pomylek
     bool backspace_flag; // ustawiana gdy wciśnięty backspace
-    bool mistake_flag;
+    bool mistake_flag; //ustawiana gdy pomylka
 
 
-    QString NewUserName;
-    QVector<user*> UserList;
-    QString activeUserString;
-    QFile* statsFile;
+    QString NewUserName; //nowy user
+    QVector<user*> UserList; //vector wskaznikow na obiekty klasy user
+    QString activeUserString; //aktualny user (do wyswietlania na labelu)
+    QFile* statsFile; //aktualny plik do zapisu timestampow
 };
 
 
