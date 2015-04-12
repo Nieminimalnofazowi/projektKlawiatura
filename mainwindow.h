@@ -29,7 +29,7 @@ public:
     void open_file();	 // otwieranie pliku gdy wybrano "Inny.."
     void show_text(QFile &file);     // wyświetla wybrany text w oknie shownText + sprząta po tym co już napisano
 private slots:
-    void keyReleaseEvent(QKeyEvent *event); //obsluguje wszystko co wydarza sie po puszczeniu klawisza
+    void keyReleaseEvent(QKeyEvent *key); //obsluguje wszystko co wydarza sie po puszczeniu klawisza
     void mousePressEvent(QMouseEvent *event); //wymagana do ustawienia focusa
     void on_typedTextBox_textChanged(); //gdy cos wpisano/skasowano
     void on_textList_activated(const QString &arg1); //rozwiniecie listy tekstow do przepisania
@@ -43,6 +43,8 @@ private slots:
     void on_pushButton_clicked(); //wcisniecie przycisku Dodaj (usera)
 
 
+    void on_resetButton_clicked(); //wcisniecie przycisku reset
+
 private:
     Ui::MainWindow *ui; //wskaznik do elementow ui
     QTime elapsedTime; //czas od rozpoczecia przepisywania
@@ -54,11 +56,15 @@ private:
     bool backspace_flag; // ustawiana gdy wciśnięty backspace
     bool mistake_flag; //ustawiana gdy pomylka
 
+    QString redColour;
+    QString blackColour;
 
     QString NewUserName; //nowy user
     QVector<user*> UserList; //vector wskaznikow na obiekty klasy user
     QString activeUserString; //aktualny user (do wyswietlania na labelu)
     QFile* statsFile; //aktualny plik do zapisu timestampow
+
+    QTextCursor tmpCursor;
 };
 
 
