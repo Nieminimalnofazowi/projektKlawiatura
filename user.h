@@ -17,8 +17,6 @@ public:
     QString getUserID();
     //metoda zapisujaca staty z danej sesji do kolejnego vectora (zwraca result)
     bool saveStats(QVector<int> currentSessionStats);
-    //zapis calosci do pliku (?)
-    bool saveStatsToFile();
     QString userID;
 private:
     //np imie i nazwisko, nick

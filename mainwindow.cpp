@@ -37,10 +37,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // na razie tutaj dodam vector userów
 
-    QVector<user*>* UserList = new QVector<user*>();
+    //QVector<user*>* UserList = new QVector<user*>();
 
     QDir directory("users/");
-    if(!directory.exists());
+    if(!directory.exists())
     {
 //        TODO
 //        QDir::mkdir("users/");
@@ -56,7 +56,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow:: open_file(){
+void MainWindow::open_file(){
 
     typedTimer->stop(); //zatrzymaj timer i odświeżanie statystyk
     QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
@@ -109,12 +109,15 @@ void MainWindow::keyReleaseEvent(QKeyEvent *)
         {
             //typedTimer->start(); //interwał odświeżania statystyk
             elapsedTime.start(); //liczymy czas pisania
-        }   
-        deltsVector.append(elapsedTime.elapsed());
+        }
+        if(elapsedTime.elapsed())
+        {
+            deltsVector.append(elapsedTime.elapsed());
+        }
         //poniższy kod sluzy sprawdzeniu zawartosci vectora
-        int temp = deltsVector[deltsVector.size()-1];
+        /*int temp = deltsVector[deltsVector.size()-1];
         QString TString = QString::number(temp,10);
-        ui->correctPercentage->setText(TString);
+        ui->correctPercentage->setText(TString);*/
         //wyglada na to ze dziala!
     }
 }
@@ -250,14 +253,15 @@ void MainWindow::error(){
 
 void MainWindow::on_saveButton_clicked()
 {
-    //plik tworzy mi sie tylko jak dodam C:\\
-    //samo Results.txt albo /res/res/Results nie działa!!
-    //Windows bug?
-    QTextStream out(this->statsFile);
+    QTextStream out(statsFile);
+    out << "\n";
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
         out << deltsVector[i] << " ";
     }
+    out << "\n";
+    if(!(statsFile->error()))
+        QMessageBox::information(this,"Zapis","Zapis zakończony powodzeniem!");
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *e){
@@ -283,7 +287,6 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *e){
 
 
     }
-
 }
 
 
@@ -298,8 +301,9 @@ void MainWindow::on_UserListCombo_activated(const QString &arg1)
               this->statsFile->close();
           }
       }
+
       this->statsFile = new QFile(QString("users/%0.txt").arg(arg1));
-      if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Text))
+      if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
           return;
 
 }
@@ -328,5 +332,3 @@ void MainWindow::on_pushButton_clicked()
 
 
 }
-
-

@@ -38,13 +38,11 @@ private slots:
     void on_saveButton_clicked();
 
     bool eventFilter(QObject *watched, QEvent *e);
-    void on_comboBox_activated(const QString &arg1);
 
     void on_UserListCombo_activated(const QString &arg1);
 
     void on_pushButton_clicked();
 
-    void on_UserName_textChanged();
 
 private:
     Ui::MainWindow *ui;
