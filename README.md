@@ -2,20 +2,20 @@
 -TIMESTAMPY DONE (przechowywane od pierwszego znaku)
 
 
--Zapis danych do .xls (aktualnie do .txt - przemyslec to)
+-Zapis danych do .txt DONE
 
 
 
--Obróbka tych danych później (np skrypt w matlabie wyliczający te średnie, które teraz bez sensu mamy w programie w labelach)
+-Obróbka tych danych później (np skrypt w matlabie wyliczający te średnie, które teraz bez sensu mamy w programie w labelach) -> TO DO!
 
 
--Wybrać kodowanie Unicode - multiplatformowość + polskie znaki
+-Wybrać kodowanie Unicode - multiplatformowość + polskie znaki (dalej nie działa u mnie na win7 UTF-8 WHY??)
 
 
--Błędy nie na czerwono tylko blokada + naliczanie błędu (jakiś flesz, czy coś, że popełniono błąd) - usuwa to problem z backspace
+-Błędy nie na czerwono tylko blokada + naliczanie błędu (jakiś flesz, czy coś, że popełniono błąd) - usuwa to problem z backspace. DONE!
 
 
--Użytkownicy z listy + dodawanie nowych. Implementacja zależna od nas? (pierwszy szkic klasy DONE
+-Użytkownicy z listy + dodawanie nowych. DONE!
 
 -KROTSZE TEXTY DONE
 
