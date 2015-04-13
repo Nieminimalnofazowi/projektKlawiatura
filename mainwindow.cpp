@@ -242,6 +242,11 @@ void MainWindow::error(){
  */
 void MainWindow::on_saveButton_clicked()
 {
+    if(statsFile == NULL) //gdy nie wybrano usera!
+    {
+        QMessageBox::information(this,"Błąd!","Wybierz użytkownika!");
+        return;
+    }
     QTextStream out(statsFile);
     out << "\n";
     for (int i=0 ; i<deltsVector.size() ; i++)
