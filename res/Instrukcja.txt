@@ -1,0 +1,2 @@
+Wybierz uzytkownika. Wybierz tekst do przepisania. Przepisz tekst i zapisz wynik.
+Test rozpocznie sie po wpisaniu pierwszej litery.
