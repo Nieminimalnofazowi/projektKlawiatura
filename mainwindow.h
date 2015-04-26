@@ -52,7 +52,9 @@ private:
     QString typedText; //tekst przepisywany
     QString mistakes_string; //string dot. bledow (label)
     QVector<int> deltsVector; //vector tzw "delt" czyli milisekund od pierwszego znaku
+
     QVector<QString> charsVector; //vector wcisnietych klawiszy
+
     int mistakeCounter; //licznik pomylek
     bool backspace_flag; // ustawiana gdy wciśnięty backspace
     bool mistake_flag; //ustawiana gdy pomylka

@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     show_text(plik); //pokaz instrukcje
 
 
-
     mistakeCounter=0;
     mistakes_string = "Błędy: ";
     mistakes_string +=  QString::number(mistakeCounter);
@@ -92,6 +91,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         {
             deltsVector.append(elapsedTime.elapsed());
             charsVector.append(event->text());
+
         }   
 
         int TTL = typedText.length();
@@ -154,7 +154,6 @@ void MainWindow::on_typedTextBox_textChanged()
 void MainWindow::show_text(QFile &file)
 {
 
-
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;			 // jeżeli nie udało się otworzyć pliku: przerwij wczytywanie pliku
 
@@ -164,6 +163,7 @@ void MainWindow::show_text(QFile &file)
     mistakeCounter = 0; //zerujemy ilość popełnionych błędów
     deltsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych timestampow
     charsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych znakow
+
     elapsedTime.restart(); //restart milisekund
     mistake_flag=0; //flaga na 0
     // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
@@ -253,6 +253,7 @@ void MainWindow::on_saveButton_clicked()
     }
     QTextStream out(statsFile);
 
+
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
         out << deltsVector[i] << " ";
@@ -260,6 +261,7 @@ void MainWindow::on_saveButton_clicked()
         out << "\n";
     }
     out << mistakeCounter;
+
     if(!(statsFile->error())) //gdy brak errorow
         QMessageBox::information(this,"Zapis","Zapis zakończony powodzeniem!");
 }
@@ -348,6 +350,7 @@ void MainWindow::on_resetButton_clicked()
     ui->mistakesCounter->setText(mistakes_string);
     deltsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych timestampow
     charsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczaasowych znakow
+
     elapsedTime.restart(); //restart milisekund
     mistake_flag=0; //flaga na 0
 }
