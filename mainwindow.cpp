@@ -29,22 +29,25 @@ MainWindow::MainWindow(QWidget *parent) :
     blackColour = "<font color=\"Black\">";
     tmpCursor = ui->typedTextBox->textCursor();
     tmpCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 4);
-
+    ui->typedTextBox->setEnabled(0);
+    ui->saveButton->setEnabled(0);
     // na razie tutaj dodam vector userów
     //QVector<user*>* UserList = new QVector<user*>();
 
     QDir directory("users/"); //tworzenie dir users/
     if(!directory.exists())
     {
-//        TODO
-//        QDir::mkdir("users/");
+
     }
-    //uzupelnienie listy userow na podstawie katalogu users
-    foreach(QString userName, directory.entryList(QStringList("*.txt")))
+    //uzupelnienie listy userow na podstawie folderów w katalogu users
+
+    foreach(QString userName, directory.entryList(QStringList()))
     {
-        ui->UserListCombo->addItem(userName.left(userName.length() - 4));
+        ui->UserListCombo->addItem(userName);
     }
 }
+
+
 
 MainWindow::~MainWindow()
 {
@@ -188,32 +191,46 @@ void MainWindow::on_textList_activated(const QString &arg1)
     if(arg1=="Instrukcja"){
         QFile plik(":/res/res/Instrukcja.txt");
         show_text(plik);
+        ui->typedTextBox->setEnabled(0);
+        ui->saveButton->setEnabled(0);
     }
 
     if(arg1=="Tekst 1"){
         QFile plik(":/res/res/Tekst 1.txt");
         show_text(plik);
+        ui->typedTextBox->setEnabled(1);
+        ui->saveButton->setEnabled(1);
     }
     if(arg1=="Tekst 2"){
         QFile plik(":/res/res/Tekst 2.txt");
         show_text(plik);
+        ui->typedTextBox->setEnabled(1);
+        ui->saveButton->setEnabled(1);
     }
     if(arg1=="Tekst 3"){
         QFile plik(":/res/res/Tekst 3.txt");
         show_text(plik);
+        ui->typedTextBox->setEnabled(1);
+        ui->saveButton->setEnabled(1);
     }
     if(arg1=="Tekst 4"){
         QFile plik(":/res/res/Tekst 4.txt");
         show_text(plik);
+        ui->typedTextBox->setEnabled(1);
+        ui->saveButton->setEnabled(1);
     }
     if(arg1=="Tekst 5"){
         QFile plik(":/res/res/Tekst 5.txt");
         show_text(plik);
+        ui->typedTextBox->setEnabled(1);
+        ui->saveButton->setEnabled(1);
     }
     if(arg1=="Inny..."){
         open_file();
+        ui->typedTextBox->setEnabled(1);
+        ui->saveButton->setEnabled(1);
     }
-
+    currentText=arg1;
 }
 
 void MainWindow::error(){
@@ -244,9 +261,38 @@ void MainWindow::error(){
 /*
  * Klikniecie przycisku Zapisz - zapisujemy do aktualnego pliku wynik testu (timestampy)
  */
+
+
+bool MainWindow::eventFilter(QObject *, QEvent *e){
+
+    if(e->type() == QEvent::KeyPress )
+    {
+        QKeyEvent * ke = static_cast<QKeyEvent * >(e);
+        if(ke->key()==Qt::Key_Backspace)
+        {
+
+            backspace_flag =0;
+            return 0;
+        }
+        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
+        {
+            return 1;
+        }
+       /* else
+        {
+            backspace_flag=1;
+            return 0;
+        }*/
+
+
+    }
+}
+
 void MainWindow::on_saveButton_clicked()
 {
-    if(statsFile == NULL) //gdy nie wybrano usera!
+    if(statsFile == NULL || ui->UserListCombo->currentIndex()==0)
+    //gdy nie wybrano usera, oraz po zapisie, gdy ustawiana jest domyślan wartość combo
+    // jest to potrzebne żeby utworzyć nowy plik do kolejnego zapisu
     {
         QMessageBox::information(this,"Błąd!","Wybierz użytkownika!");
         return;
@@ -264,39 +310,18 @@ void MainWindow::on_saveButton_clicked()
 
     if(!(statsFile->error())) //gdy brak errorow
         QMessageBox::information(this,"Zapis","Zapis zakończony powodzeniem!");
+    ui->UserListCombo->setCurrentIndex(0);
+
+
+
 }
-
-bool MainWindow::eventFilter(QObject *, QEvent *e){
-
-    if(e->type() == QEvent::KeyPress )
-    {
-        QKeyEvent * ke = static_cast<QKeyEvent * >(e);
-        if(ke->key()==Qt::Key_Backspace)
-        {
-
-            backspace_flag =0;
-            return 0;
-        }
-        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
-        {
-            return 1;
-        }
-        else
-        {
-            backspace_flag=1;
-            return 0;
-        }
-
-
-    }
-}
-
-
 /*
  * Rozwinieto liste userow
  */
 void MainWindow::on_UserListCombo_activated(const QString &arg1)
 {
+
+      //QDir::setCurrent("users/"+arg1 +"/");
       ui->activeUser->setText(activeUserString + arg1); //zmiana tekstu w labelu
       if(this->statsFile != NULL) //gdy otwarty to zamknij
       {
@@ -305,11 +330,12 @@ void MainWindow::on_UserListCombo_activated(const QString &arg1)
               this->statsFile->close();
           }
       }
-
-      this->statsFile = new QFile(QString("users/%0.txt").arg(arg1)); //ustaw wskaznik na nowy plik
+      currentUser = arg1;
+      //this->statsFile = new QFile(QString("users/%0.txt").arg(arg1)); //ustaw wskaznik na nowy plik
+      date = day.currentDateTime().toString();
+      this->statsFile = new QFile(QString("users/"+arg1+"/""%0.txt").arg( date ));
       if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) //otworz w trybie append
           return;
-
 }
 /*
  * Kliknieto przycisk dodaj usera
@@ -322,13 +348,22 @@ void MainWindow::on_pushButton_clicked()
 
     if(!NewUserName.isEmpty()){ //gdy cos wpisano
 
+
+
+        QDir().mkdir("users/"+NewUserName+"/"); // tworzenie folderu z userem zamiast pliku
+
         UserList.append(new user(NewUserName)); //dodanie usera
-        QFile userFile(QString("users/%0.txt").arg(NewUserName)); //oraz jego pliku do /users
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!
+        QFile userFile(QString("users/"+NewUserName+"/""%0.txt").arg(NewUserName)); //oraz jego pliku do /users/Nazwa_Uzytkownika !!!
+
         if(!userFile.open(QIODevice::WriteOnly | QIODevice::Text)) //otwarcie i zamkniecie aby go utworzyc pustego
         {
 
         }
         userFile.close();
+
+
         ui->UserListCombo->addItem(NewUserName); //dodanie nowego usera do combolisty
         ui->UserListCombo->update(); //update combo
         QMessageBox::information(this,"Wiadomość","Dodano użytkownika: " + NewUserName);

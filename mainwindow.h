@@ -15,6 +15,7 @@
 #include <user.h>
 #include <QComboBox>
 #include <QPushButton>
+#include <QDate>
 namespace Ui {
 class MainWindow;
 }
@@ -68,6 +69,11 @@ private:
     QFile* statsFile; //aktualny plik do zapisu timestampow
 
     QTextCursor tmpCursor;
+
+    QString currentText;
+    QString currentUser;
+    QString date;
+    QDateTime day;
 };
 
 
