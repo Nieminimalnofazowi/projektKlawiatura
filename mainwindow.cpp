@@ -188,7 +188,7 @@ void MainWindow::on_textList_activated(const QString &arg1)
 {
 
     mistakeCounter=0;
-    if(arg1=="Instrukcja"){
+    if(ui->textList->currentIndex()==0){
         QFile plik(":/res/res/Instrukcja.txt");
         show_text(plik);
         ui->typedTextBox->setEnabled(0);
@@ -311,7 +311,9 @@ void MainWindow::on_saveButton_clicked()
     if(!(statsFile->error())) //gdy brak errorow
         QMessageBox::information(this,"Zapis","Zapis zakończony powodzeniem!");
     ui->UserListCombo->setCurrentIndex(0);
-
+    ui->textList->setCurrentIndex(0);
+    ui->typedTextBox->setEnabled(0);
+    ui->saveButton->setEnabled(0);
 
 
 }
@@ -354,14 +356,14 @@ void MainWindow::on_pushButton_clicked()
 
         UserList.append(new user(NewUserName)); //dodanie usera
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!
+        /*!!!!!!!!!!!!!!!!!!!!!!!!
         QFile userFile(QString("users/"+NewUserName+"/""%0.txt").arg(NewUserName)); //oraz jego pliku do /users/Nazwa_Uzytkownika !!!
 
         if(!userFile.open(QIODevice::WriteOnly | QIODevice::Text)) //otwarcie i zamkniecie aby go utworzyc pustego
         {
 
-        }
-        userFile.close();
+       }
+        userFile.close();*/
 
 
         ui->UserListCombo->addItem(NewUserName); //dodanie nowego usera do combolisty
