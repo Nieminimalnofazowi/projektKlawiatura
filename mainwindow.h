@@ -74,6 +74,8 @@ private:
     QString currentUser;
     QString date;
     QDateTime day;
+    int tempCounter;
+
 };
 
 

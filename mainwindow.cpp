@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tmpCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 4);
     ui->typedTextBox->setEnabled(0);
     ui->saveButton->setEnabled(0);
+    tempCounter=0;
     // na razie tutaj dodam vector userów
     //QVector<user*>* UserList = new QVector<user*>();
 
@@ -106,18 +107,28 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         {
 
                ++mistakeCounter;
-                typedText.insert(typedText.length()-1,redColour);
+
+                //typedText.insert(typedText.length()-tempCounter ,redColour);
+                typedText.insert(typedText.left(tempCounter).length() ,redColour);
+                //ui->typedTextBox->setTextColor(Qt::red);
 
                 ui->typedTextBox->setText(typedText);
                 ui->typedTextBox->setTextCursor(tmpCursor);
                 /*typedText.insert(typedText.length(),blackColour);
                 ui->typedTextBox->setText(typedText);
                 ui->typedTextBox->setTextCursor(tmpCursor);*/
-               mistake_flag=1;
+              // mistake_flag=1; // way to go :P
 
 
         }
-        else if(shownText.left(TTL)==typedText) mistake_flag=0;
+        else if(shownText.left(TTL)==typedText){
+
+            //ui->typedTextBox->setTextColor(Qt::black);
+                   mistake_flag=0;
+     tempCounter=typedText.length();
+
+
+        }
         mistakes_string = "Błędy: ";
         mistakes_string +=  QString::number(mistakeCounter);
         ui->mistakesCounter->setText(mistakes_string);
@@ -274,15 +285,15 @@ bool MainWindow::eventFilter(QObject *, QEvent *e){
             backspace_flag =0;
             return 0;
         }
-        else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
+        /*else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
         {
             return 1;
-        }
-       /* else
+        }*/
+        else
         {
             backspace_flag=1;
             return 0;
-        }*/
+        }
 
 
     }
