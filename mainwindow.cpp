@@ -82,7 +82,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     if (ui->typedTextBox->hasFocus())
     {
         typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
-        if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
+        if(typedText.length() == 1 || typedText.length()==0) //pierwszy znak - rozpoczecie odliczania czasu
         {
             elapsedTime.restart(); //liczymy czas pisania
             deltsVector.append(elapsedTime.elapsed());
@@ -210,7 +210,7 @@ void MainWindow::on_textList_activated(const QString &arg1)
 
 bool MainWindow::eventFilter(QObject *, QEvent *e){
 
-    if(e->type() == QEvent::KeyPress )
+    if(e->type() == QEvent::KeyRelease )
     {
         QKeyEvent * ke = static_cast<QKeyEvent * >(e);
         if(ke->key()==Qt::Key_Backspace)
