@@ -20,10 +20,4 @@ QString user::getUserID()
     return this->userID;
 }
 
-bool user::saveStats(QVector<int> currentSessionStats)
-{
-    this->stats.append(currentSessionStats);
-    return 1;
-}
-
 

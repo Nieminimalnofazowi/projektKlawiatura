@@ -32,9 +32,7 @@ public:
 private slots:
     void keyReleaseEvent(QKeyEvent *event); //obsluguje wszystko co wydarza sie po puszczeniu klawisza
     void mousePressEvent(QMouseEvent *event); //wymagana do ustawienia focusa
-    void on_typedTextBox_textChanged(); //gdy cos wpisano/skasowano
     void on_textList_activated(const QString &arg1); //rozwiniecie listy tekstow do przepisania
-    void error(); //error ??
     void on_saveButton_clicked(); //przycisk zapisz wyniki testu
 
     bool eventFilter(QObject *, QEvent *e); //filter eventow (nie liczenie bckspc)
@@ -59,6 +57,7 @@ private:
     int mistakeCounter; //licznik pomylek
     bool backspace_flag; // ustawiana gdy wciśnięty backspace
     bool mistake_flag; //ustawiana gdy pomylka
+    bool shift_flag; //przechwytywanie shifta
 
     QString redColour;
     QString blackColour;
@@ -68,13 +67,11 @@ private:
     QString activeUserString; //aktualny user (do wyswietlania na labelu)
     QFile* statsFile; //aktualny plik do zapisu timestampow
 
-    QTextCursor tmpCursor;
+    QTextCursor tmpCursor; //kursor uzywany do kolorowania tekstu
 
-    QString currentText;
-    QString currentUser;
-    QString date;
-    QDateTime day;
-    int tempCounter;
+    QString date; //data czas jako string do nazwy pliku
+    QDateTime day; //data czas obsluga
+    int tempCounter; //liczenie znakow w obsludze bledow
 
 };
 

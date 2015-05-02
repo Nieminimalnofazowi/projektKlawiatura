@@ -32,16 +32,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->typedTextBox->setEnabled(0);
     ui->saveButton->setEnabled(0);
     tempCounter=0;
-    // na razie tutaj dodam vector userów
-    //QVector<user*>* UserList = new QVector<user*>();
 
     QDir directory("users/"); //tworzenie dir users/
     if(!directory.exists())
     {
 
     }
-    //uzupelnienie listy userow na podstawie folderów w katalogu users
 
+    //uzupelnienie listy userow na podstawie folderów w katalogu users
     foreach(QString userName, directory.entryList(QStringList()))
     {
         ui->UserListCombo->addItem(userName);
@@ -61,7 +59,6 @@ void MainWindow::open_file(){
 
     QString fileName = QFileDialog::getOpenFileName(this,tr("Otwórz..."), "/home/", tr("Pliki txt (*.txt)"));
     QFile plik(fileName);
-    mistakeCounter=0;
     show_text(plik);
 }
 
@@ -91,15 +88,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
             deltsVector.append(elapsedTime.elapsed());
             charsVector.append(event->text());
         }
-        if(elapsedTime.elapsed()) //gdy timer ruszyl (nie zapisze zer na poczatku)
-        {
-            deltsVector.append(elapsedTime.elapsed());
-            charsVector.append(event->text());
 
-        }   
 
-        int TTL = typedText.length();
-        //temp.chop(STL-TTL);
+        int TTL = typedText.length(); //TypedTextLength
 
         if(shownText.left(TTL)==typedText ) mistake_flag=0;
         if(typedText.isEmpty()) mistake_flag=0;
@@ -107,25 +98,19 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         {
 
                ++mistakeCounter;
-
-                //typedText.insert(typedText.length()-tempCounter ,redColour);
+                mistake_flag=1;
                 typedText.insert(typedText.left(tempCounter).length() ,redColour);
-                //ui->typedTextBox->setTextColor(Qt::red);
 
                 ui->typedTextBox->setText(typedText);
+                //po pokolorowaniu ustaw z powrotem kursor w miejsce pisania
                 ui->typedTextBox->setTextCursor(tmpCursor);
-                /*typedText.insert(typedText.length(),blackColour);
-                ui->typedTextBox->setText(typedText);
-                ui->typedTextBox->setTextCursor(tmpCursor);*/
-              // mistake_flag=1; // way to go :P
-
 
         }
-        else if(shownText.left(TTL)==typedText){
+        else if(shownText.left(TTL)==typedText)
+        {
 
-            //ui->typedTextBox->setTextColor(Qt::black);
-                   mistake_flag=0;
-     tempCounter=typedText.length();
+                mistake_flag=0;
+                tempCounter=typedText.length();
 
 
         }
@@ -133,30 +118,15 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         mistakes_string +=  QString::number(mistakeCounter);
         ui->mistakesCounter->setText(mistakes_string);
 
-
+        if(elapsedTime.elapsed()) //gdy timer ruszyl
+        {
+            if(backspace_flag!=0 && mistake_flag==0 && shift_flag!=0)
+            {
+                deltsVector.append(elapsedTime.elapsed());
+                charsVector.append(event->text());
+            }
+        }
     }
-}
-/*
- * Gdy cos zmieniono w textboxie
- */
-
-void MainWindow::on_typedTextBox_textChanged()
-{
-    //typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
-
-    //numberOfTypedWords = typedText.count(QRegExp("\\s\\S")) + 1; //wykrycie białego znaku a zaraz po nim znaku - czyli spacja
-
-   // if(typedText.length() == 1) //pierwszy znak - rozpoczecie odliczania czasu
-  //  {
-  //      typedTimer->start(); //interwał odświeżania statystyk
-  //      elapsedTime.restart(); //liczymy czas pisania od nowa
-  //  }
-
-    //QString temp;
-    //temp = shownText;
-
-
-
 }
 
 
@@ -171,15 +141,9 @@ void MainWindow::show_text(QFile &file)
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;			 // jeżeli nie udało się otworzyć pliku: przerwij wczytywanie pliku
 
-    // czyścimy wcześniej zapełnioną zmienną tekstową
+    // reset wszystkiego
+    on_resetButton_clicked();
     shownText.clear();
-    ui->typedTextBox->clear(); //czyścimy też to co wcześniej wpisaliśmy
-    mistakeCounter = 0; //zerujemy ilość popełnionych błędów
-    deltsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych timestampow
-    charsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych znakow
-
-    elapsedTime.restart(); //restart milisekund
-    mistake_flag=0; //flaga na 0
     // klasa zapewniająca nam interfejs do odczytu/zapisu tekstu
     QTextStream stream(&file);
 
@@ -197,8 +161,6 @@ void MainWindow::show_text(QFile &file)
  */
 void MainWindow::on_textList_activated(const QString &arg1)
 {
-
-    mistakeCounter=0;
     if(ui->textList->currentIndex()==0){
         QFile plik(":/res/res/Instrukcja.txt");
         show_text(plik);
@@ -241,37 +203,9 @@ void MainWindow::on_textList_activated(const QString &arg1)
         ui->typedTextBox->setEnabled(1);
         ui->saveButton->setEnabled(1);
     }
-    currentText=arg1;
 }
 
-void MainWindow::error(){
 
- QString temp;
- temp = shownText;
- int  STL = shownText.length();
- int TTL = typedText.length();
- temp.chop(STL-TTL);
-
- if(temp==typedText ) mistake_flag=0;
- if(typedText.isEmpty()) mistake_flag=0;
- if(temp!=typedText && backspace_flag!=0)
- {
-
-        ++mistakeCounter;
-
-        mistake_flag=1;
-
-
- }
- else if(temp==typedText) mistake_flag=0;
- mistakes_string = "Błędy: ";
- mistakes_string +=  QString::number(mistakeCounter);
- ui->mistakesCounter->setText(mistakes_string);
-}
-
-/*
- * Klikniecie przycisku Zapisz - zapisujemy do aktualnego pliku wynik testu (timestampy)
- */
 
 
 bool MainWindow::eventFilter(QObject *, QEvent *e){
@@ -283,22 +217,27 @@ bool MainWindow::eventFilter(QObject *, QEvent *e){
         {
 
             backspace_flag =0;
-            return 0;
         }
-        /*else if(ke->key()!= Qt::Key_Backspace && mistake_flag==1 && backspace_flag==1) // już lepiej -> został problem z dwoma pierwszymi znakami źle
-        {
-            return 1;
-        }*/
         else
         {
             backspace_flag=1;
+        }
+        if(ke->key()==Qt::Key_Shift)
+        {
+            shift_flag=0;
             return 0;
         }
-
-
+        else
+        {
+            shift_flag=1;
+            return 0;
+        }
     }
 }
 
+/*
+ * Klikniecie przycisku Zapisz - zapisujemy do aktualnego pliku wynik testu (timestampy)
+ */
 void MainWindow::on_saveButton_clicked()
 {
     if(statsFile == NULL || ui->UserListCombo->currentIndex()==0)
@@ -313,7 +252,7 @@ void MainWindow::on_saveButton_clicked()
 
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
-        out << deltsVector[i] << " ";
+        out << deltsVector[i] << "\t";
         out << charsVector[i];
         out << "\n";
     }
@@ -333,8 +272,6 @@ void MainWindow::on_saveButton_clicked()
  */
 void MainWindow::on_UserListCombo_activated(const QString &arg1)
 {
-
-      //QDir::setCurrent("users/"+arg1 +"/");
       ui->activeUser->setText(activeUserString + arg1); //zmiana tekstu w labelu
       if(this->statsFile != NULL) //gdy otwarty to zamknij
       {
@@ -343,8 +280,6 @@ void MainWindow::on_UserListCombo_activated(const QString &arg1)
               this->statsFile->close();
           }
       }
-      currentUser = arg1;
-      //this->statsFile = new QFile(QString("users/%0.txt").arg(arg1)); //ustaw wskaznik na nowy plik
       date = day.currentDateTime().toString();
       this->statsFile = new QFile(QString("users/"+arg1+"/""%0.txt").arg( date ));
       if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) //otworz w trybie append
@@ -359,23 +294,12 @@ void MainWindow::on_pushButton_clicked()
     //z LineEdit do stringa
     NewUserName = ui->UserName->toPlainText();
 
-    if(!NewUserName.isEmpty()){ //gdy cos wpisano
-
-
+    if(!NewUserName.isEmpty())
+    { //gdy cos wpisano
 
         QDir().mkdir("users/"+NewUserName+"/"); // tworzenie folderu z userem zamiast pliku
 
         UserList.append(new user(NewUserName)); //dodanie usera
-
-        /*!!!!!!!!!!!!!!!!!!!!!!!!
-        QFile userFile(QString("users/"+NewUserName+"/""%0.txt").arg(NewUserName)); //oraz jego pliku do /users/Nazwa_Uzytkownika !!!
-
-        if(!userFile.open(QIODevice::WriteOnly | QIODevice::Text)) //otwarcie i zamkniecie aby go utworzyc pustego
-        {
-
-       }
-        userFile.close();*/
-
 
         ui->UserListCombo->addItem(NewUserName); //dodanie nowego usera do combolisty
         ui->UserListCombo->update(); //update combo
