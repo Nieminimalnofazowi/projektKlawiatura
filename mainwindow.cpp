@@ -267,13 +267,24 @@ bool MainWindow::eventFilter(QObject *, QEvent *e){
  */
 void MainWindow::on_saveButton_clicked()
 {
-    if(statsFile == NULL || ui->UserListCombo->currentIndex()==0)
-    //gdy nie wybrano usera, oraz po zapisie, gdy ustawiana jest domyślan wartość combo
-    // jest to potrzebne żeby utworzyć nowy plik do kolejnego zapisu
+    if(ui->UserListCombo->currentIndex()==0)
     {
         QMessageBox::information(this,"Błąd!","Wybierz użytkownika!");
         return;
     }
+
+    if(this->statsFile != NULL) //gdy otwarty to zamknij
+    {
+        if(this->statsFile->isOpen())
+        {
+            this->statsFile->close();
+        }
+    }
+    date = day.currentDateTime().toString();
+    this->statsFile = new QFile(QString("users/"+userComboArg+"/""%0.txt").arg( date ));
+    if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) //otworz w trybie append
+        return;
+
     QTextStream out(statsFile);
 
 
@@ -301,17 +312,7 @@ void MainWindow::on_UserListCombo_activated(const QString &arg1)
 {
       ui->activeUser->setText(activeUserString + arg1); //zmiana tekstu w labelu
       currentUser = ui->UserListCombo->currentIndex();
-      if(this->statsFile != NULL) //gdy otwarty to zamknij
-      {
-          if(this->statsFile->isOpen())
-          {
-              this->statsFile->close();
-          }
-      }
-      date = day.currentDateTime().toString();
-      this->statsFile = new QFile(QString("users/"+arg1+"/""%0.txt").arg( date ));
-      if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) //otworz w trybie append
-          return;
+      userComboArg = arg1;
 }
 /*
  * Kliknieto przycisk dodaj usera

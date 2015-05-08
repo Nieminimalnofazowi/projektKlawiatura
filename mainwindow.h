@@ -61,7 +61,7 @@ private:
     bool backspace_flag; // ustawiana gdy wciśnięty backspace
     bool mistake_flag; //ustawiana gdy pomylka
     bool shift_flag; //przechwytywanie shifta
-    bool enter_flag;
+    bool enter_flag; //przechwytywanie entera
 
     QString redColour;
     QString blackColour;
@@ -69,6 +69,7 @@ private:
     QString NewUserName; //nowy user
     QVector<user*> UserList; //vector wskaznikow na obiekty klasy user
     QString activeUserString; //aktualny user (do wyswietlania na labelu)
+    QString userComboArg; //argument z userComboList
     QFile* statsFile; //aktualny plik do zapisu timestampow
 
     QTextCursor tmpCursor; //kursor uzywany do kolorowania tekstu
@@ -77,9 +78,6 @@ private:
     QDateTime day; //data czas obsluga
     int tempCounter; //liczenie znakow w obsludze bledow
 
-    QStringList listaPlikow;
-    QVector<int> numeryPlikow;
-    QDir userDirectory;
 };
 
 
