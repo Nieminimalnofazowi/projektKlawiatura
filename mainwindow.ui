@@ -79,16 +79,6 @@ p, li { white-space: pre-wrap; }
         <string>Dodaj</string>
        </property>
       </widget>
-      <widget class="QTextEdit" name="UserName">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>190</y>
-         <width>191</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="activeUser">
        <property name="geometry">
         <rect>
@@ -129,6 +119,16 @@ p, li { white-space: pre-wrap; }
          <string>Wybierz:</string>
         </property>
        </item>
+      </widget>
+      <widget class="QLineEdit" name="addUser">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>190</y>
+         <width>191</width>
+         <height>23</height>
+        </rect>
+       </property>
       </widget>
      </widget>
     </item>

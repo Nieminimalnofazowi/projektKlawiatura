@@ -22,3 +22,5 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui
 
 RESOURCES += resources.qrc
+
+QMAKE_LFLAGS += -static-libgcc

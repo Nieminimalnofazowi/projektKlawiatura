@@ -35,7 +35,7 @@ private slots:
     void on_textList_activated(const QString &arg1); //rozwiniecie listy tekstow do przepisania
     void on_saveButton_clicked(); //przycisk zapisz wyniki testu
 
-    bool eventFilter(QObject *, QEvent *e); //filter eventow (nie liczenie bckspc)
+    bool eventFilter(QObject *object, QEvent *e); //filter eventow (nie liczenie bckspc)
 
     void on_UserListCombo_activated(const QString &arg1); //rozwiniecie listy userow
 

@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QFile plik(":/res/res/Instrukcja.txt");
     show_text(plik); //pokaz instrukcje
 
-
+    //zatwierdzam nowego usera enterem
+    connect(ui->addUser,SIGNAL(returnPressed()),ui->pushButton,SIGNAL(clicked()));
 
     mistakeCounter=0;
     mistakes_string = "Błędy: ";
@@ -23,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->typedTextBox->installEventFilter(this); //antybackspace
     mistake_flag=0;
+    backspace_flag=1;
+    enter_flag=1;
+    shift_flag=1;
     activeUserString= "Bieżący użytkownik to: \n";
     ui->activeUser->setText(activeUserString );
 
@@ -34,15 +38,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->saveButton->setEnabled(0);
     tempCounter=0;
 
-    QDir directory("users/"); //tworzenie dir users/
+    /*QDir directory("users/"); //tworzenie dir users/ (windows??)
     if(!directory.exists())
     {
 
-    }
+    }*/
+    QDir directory("users"); //tworzenie dir users/ (linux??)
 
+    if (!directory.exists()) {
+       directory.mkpath(".");
+    }
     //uzupelnienie listy userow na podstawie folderów w katalogu users
     foreach(QString userName, directory.entryList(QStringList()))
     {
+        if(userName=="." || userName=="..")
+            continue;
         ui->UserListCombo->addItem(userName);
     }
 }
@@ -93,7 +103,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     else if (ui->typedTextBox->hasFocus())
     {
         typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
-        if(typedText.length() == 1 || typedText.length()==0) //pierwszy znak - rozpoczecie odliczania czasu
+        if(typedText.length()==0)
+            elapsedTime.restart();
+        if(typedText.length() == 1 ) //pierwszy znak - rozpoczecie odliczania czasu
         {
             elapsedTime.restart(); //liczymy czas pisania
             deltsVector.append(elapsedTime.elapsed());
@@ -225,7 +237,7 @@ void MainWindow::on_textList_activated(const QString &arg1)
 
 
 
-bool MainWindow::eventFilter(QObject *, QEvent *e){
+bool MainWindow::eventFilter(QObject *object, QEvent *e){
 
     if(e->type() == QEvent::KeyRelease )
     {
@@ -249,17 +261,18 @@ bool MainWindow::eventFilter(QObject *, QEvent *e){
             shift_flag=1;
 
         }
-        if(ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return)
+        if(ke->key()==Qt::Key_Return || ke->key()==Qt::Key_Enter)
         {
             enter_flag=0;
-            return 0;
+
         }
         else
         {
             enter_flag=1;
-            return 0;
+
         }
     }
+    return QMainWindow::eventFilter(object,e);
 }
 
 /*
@@ -321,7 +334,7 @@ void MainWindow::on_pushButton_clicked()
 {
 
     //z LineEdit do stringa
-    NewUserName = ui->UserName->toPlainText();
+    NewUserName = ui->addUser->text();
 
     if(!NewUserName.isEmpty())
     { //gdy cos wpisano
@@ -333,7 +346,7 @@ void MainWindow::on_pushButton_clicked()
         ui->UserListCombo->addItem(NewUserName); //dodanie nowego usera do combolisty
         ui->UserListCombo->update(); //update combo
         QMessageBox::information(this,"Wiadomość","Dodano użytkownika: " + NewUserName);
-        ui->UserName->clear(); //clear LineEdit
+        ui->addUser->clear(); //clear LineEdit
     }
 
 
