@@ -93,7 +93,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     if(!enter_flag)
     {
         typedText=ui->typedTextBox->toPlainText();
-        if((shownText.length()==typedText.length()) && mistake_flag==0)
+
+        if((shownText.length()-1==typedText.length()) && mistake_flag==0)
             on_saveButton_clicked();
         else
         {
@@ -239,7 +240,7 @@ void MainWindow::on_textList_activated(const QString &arg1)
 
 bool MainWindow::eventFilter(QObject *object, QEvent *e){
 
-    if(e->type() == QEvent::KeyRelease )
+    if(object==ui->typedTextBox && e->type() == QEvent::KeyPress )
     {
         QKeyEvent * ke = static_cast<QKeyEvent * >(e);
         if(ke->key()==Qt::Key_Backspace)
@@ -254,7 +255,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *e){
         if(ke->key()==Qt::Key_Shift)
         {
             shift_flag=0;
-
+            return true;
         }
         else
         {
@@ -264,15 +265,16 @@ bool MainWindow::eventFilter(QObject *object, QEvent *e){
         if(ke->key()==Qt::Key_Return || ke->key()==Qt::Key_Enter)
         {
             enter_flag=0;
-
+            return true;
         }
         else
         {
             enter_flag=1;
-
+            //return false;
         }
+
     }
-    return QMainWindow::eventFilter(object,e);
+  return QMainWindow::eventFilter(object,e);
 }
 
 /*
@@ -294,8 +296,10 @@ void MainWindow::on_saveButton_clicked()
         }
     }
     date = day.currentDateTime().toString();
-    this->statsFile = new QFile(QString("users/"+userComboArg+"/""%0.txt").arg( date ));
-    if(!this->statsFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) //otworz w trybie append
+    date.replace(":",".");
+    QString fileName = QString("users/"+userComboArg+"/"+"%0.txt").arg(date);
+    this->statsFile = new QFile(fileName);
+    if(!this->statsFile->open(QIODevice::ReadWrite | QIODevice::Text)) //otworz
         return;
 
     QTextStream out(statsFile);
@@ -303,6 +307,8 @@ void MainWindow::on_saveButton_clicked()
 
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
+        if(charsVector[i]=="")
+            continue;
         out << deltsVector[i] << "\t";
         out << charsVector[i];
         out << "\n";
