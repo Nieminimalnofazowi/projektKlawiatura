@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     show_text(plik); //pokaz instrukcje
 
 
+
     mistakeCounter=0;
     mistakes_string = "Błędy: ";
     mistakes_string +=  QString::number(mistakeCounter);
@@ -79,7 +80,17 @@ void MainWindow::mousePressEvent(QMouseEvent *)
  */
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
-    if (ui->typedTextBox->hasFocus())
+    if(!enter_flag)
+    {
+        typedText=ui->typedTextBox->toPlainText();
+        if((shownText.length()==typedText.length()) && mistake_flag==0)
+            on_saveButton_clicked();
+        else
+        {
+            on_resetButton_clicked();
+        }
+    }
+    else if (ui->typedTextBox->hasFocus())
     {
         typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
         if(typedText.length() == 1 || typedText.length()==0) //pierwszy znak - rozpoczecie odliczania czasu
@@ -173,35 +184,41 @@ void MainWindow::on_textList_activated(const QString &arg1)
         show_text(plik);
         ui->typedTextBox->setEnabled(1);
         ui->saveButton->setEnabled(1);
+        currentText = ui->textList->currentIndex();
     }
     if(arg1=="Tekst 2"){
         QFile plik(":/res/res/Tekst 2.txt");
         show_text(plik);
         ui->typedTextBox->setEnabled(1);
         ui->saveButton->setEnabled(1);
+        currentText = ui->textList->currentIndex();
     }
     if(arg1=="Tekst 3"){
         QFile plik(":/res/res/Tekst 3.txt");
         show_text(plik);
         ui->typedTextBox->setEnabled(1);
         ui->saveButton->setEnabled(1);
+        currentText = ui->textList->currentIndex();
     }
     if(arg1=="Tekst 4"){
         QFile plik(":/res/res/Tekst 4.txt");
         show_text(plik);
         ui->typedTextBox->setEnabled(1);
         ui->saveButton->setEnabled(1);
+        currentText = ui->textList->currentIndex();
     }
     if(arg1=="Tekst 5"){
         QFile plik(":/res/res/Tekst 5.txt");
         show_text(plik);
         ui->typedTextBox->setEnabled(1);
         ui->saveButton->setEnabled(1);
+        currentText = ui->textList->currentIndex();
     }
     if(arg1=="Inny..."){
         open_file();
         ui->typedTextBox->setEnabled(1);
         ui->saveButton->setEnabled(1);
+        currentText = ui->textList->currentIndex();
     }
 }
 
@@ -225,11 +242,21 @@ bool MainWindow::eventFilter(QObject *, QEvent *e){
         if(ke->key()==Qt::Key_Shift)
         {
             shift_flag=0;
-            return 0;
+
         }
         else
         {
             shift_flag=1;
+
+        }
+        if(ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return)
+        {
+            enter_flag=0;
+            return 0;
+        }
+        else
+        {
+            enter_flag=1;
             return 0;
         }
     }
@@ -260,11 +287,11 @@ void MainWindow::on_saveButton_clicked()
 
     if(!(statsFile->error())) //gdy brak errorow
         QMessageBox::information(this,"Zapis","Zapis zakończony powodzeniem!");
-    ui->UserListCombo->setCurrentIndex(0);
-    ui->textList->setCurrentIndex(0);
-    ui->typedTextBox->setEnabled(0);
-    ui->saveButton->setEnabled(0);
-
+    ui->UserListCombo->setCurrentIndex(currentUser);
+    ui->textList->setCurrentIndex(currentText);
+    ui->typedTextBox->setEnabled(1);
+    ui->saveButton->setEnabled(1);
+    on_resetButton_clicked();
 
 }
 /*
@@ -273,6 +300,7 @@ void MainWindow::on_saveButton_clicked()
 void MainWindow::on_UserListCombo_activated(const QString &arg1)
 {
       ui->activeUser->setText(activeUserString + arg1); //zmiana tekstu w labelu
+      currentUser = ui->UserListCombo->currentIndex();
       if(this->statsFile != NULL) //gdy otwarty to zamknij
       {
           if(this->statsFile->isOpen())

@@ -55,9 +55,13 @@ private:
     QVector<QString> charsVector; //vector wcisnietych klawiszy
 
     int mistakeCounter; //licznik pomylek
+    int currentUser; //aktualny numer usera w combo
+    int currentText; //aktualny numer tekstu w combo
+
     bool backspace_flag; // ustawiana gdy wciśnięty backspace
     bool mistake_flag; //ustawiana gdy pomylka
     bool shift_flag; //przechwytywanie shifta
+    bool enter_flag;
 
     QString redColour;
     QString blackColour;
@@ -73,6 +77,9 @@ private:
     QDateTime day; //data czas obsluga
     int tempCounter; //liczenie znakow w obsludze bledow
 
+    QStringList listaPlikow;
+    QVector<int> numeryPlikow;
+    QDir userDirectory;
 };
 
 

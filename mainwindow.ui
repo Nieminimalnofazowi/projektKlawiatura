@@ -46,6 +46,9 @@
     <property name="text">
      <string>&amp;Zapisz</string>
     </property>
+    <property name="default">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QTextEdit" name="testTextBox">
     <property name="enabled">
@@ -264,7 +267,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>767</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
