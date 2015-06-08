@@ -1,4 +1,3 @@
-# projektKlawiatura
 Program ma na celu zbieranie danych dotyczących dynamiki wpisywania haseł przez różnych użytkowników.
 W celu pobrania próbki danych należy:
 
@@ -17,3 +16,4 @@ W celu pobrania próbki danych należy:
 -Po zatwierdzeniu próbki pojawia się komunikat o pomyślnym zapisie danych do pliku. Ten komunikat również można zatwierdzić enterem, a następnie od razu zacząć wpisywać kolejną próbkę. Ułatwia to pobierania dużej ilości danych - użytkownik nie musi używać myszki.
 
 -W przypadku chęci pobrania danych od innej osoby w każdej chwili można zmienić użytkownika z listy rozwijanej po prawej stronie.
+
