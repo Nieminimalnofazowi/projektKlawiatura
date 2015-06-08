@@ -57,13 +57,15 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 }
 
-
-
+/*!
+ * Destruktor obiektu klasy MainWindow. Zapewnia zwolnienie pamięci ze wszystkich dynamicznie
+ * tworzonych obiektów w trakcie pracy aplikacji
+ */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-/*
+/*!
  * Otwieranie wlasnego pliku do przepisania
  */
 void MainWindow::open_file(){
@@ -74,7 +76,7 @@ void MainWindow::open_file(){
 }
 
 
-/*
+/*!
  * Metoda ktorej celem jest ustawienie focus na klawiature. Pozwala
  * na "przeniesienie" scope'a keyReleaseEvent z klasy QWidget na MainWindow
  * source: stackoverflow :))
@@ -84,9 +86,11 @@ void MainWindow::mousePressEvent(QMouseEvent *)
     setFocusPolicy(Qt::ClickFocus);
 }
 
-/*
- * Uruchamiana po puszczeniu klawisza. zapelnia wektor z elementami
- * typu integer timestampami
+/*!
+ * Metoda uruchamiana po puszczeniu klawisza. Zapelnia wektory timestampów oraz wpisanych klawiszy.
+ * Ponadto kontroluje czy został wciśnięty enter -> wywołuje metode zapisania tekstu
+ * czy został wciśnięty shift -> aby zapobiec zapisywaniu dwóch wartości po wpisaniu np. $
+ * czy został wciśnięty backspace -> obsługa błędów i kolorowanie czcionki.
  */
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
@@ -153,9 +157,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 }
 
 
-/*
+/*!
  * Wyświetlenie tekstu z resources/wlasnego zrodla do shownTextbox
- * czyli boxa do przepisywania.
+ * czyli boxa zawierającego tekst do przepisania.
  * Tutaj tez wykonuje sie CLEAR tego co dokonano do tej pory
  */
 void MainWindow::show_text(QFile &file)
@@ -179,8 +183,9 @@ void MainWindow::show_text(QFile &file)
     file.close();
 
 }
-/*
- * Rozwiniecie listy dostepnych tekstow
+/*!
+ * Metoda wywoływana gdy został wybrany element listy rozwijanej zawierającej teksty do przepisania.
+ * Po sprawdzeniu który wybrano metoda wczytuje odpowiedni plik z resources za pomocą metody show_text
  */
 void MainWindow::on_textList_activated(const QString &arg1)
 {
@@ -236,7 +241,11 @@ void MainWindow::on_textList_activated(const QString &arg1)
 
 
 
-
+/*!
+ * Event filter, który ma za zadanie odseparować specjalne przypadki w metodzie KeyReleased.
+ * Przechwytujemy wciskany klawisz Backspace, Shift oraz Enter aby ustawić odpowiednie flagi i
+ * obsłużyć je w metodzie KeyReleased
+ */
 bool MainWindow::eventFilter(QObject *object, QEvent *e){
 
     if(e->type() == QEvent::KeyRelease )
@@ -275,8 +284,8 @@ bool MainWindow::eventFilter(QObject *object, QEvent *e){
     return QMainWindow::eventFilter(object,e);
 }
 
-/*
- * Klikniecie przycisku Zapisz - zapisujemy do aktualnego pliku wynik testu (timestampy)
+/*!
+ * Klikniecie przycisku Zapisz - zapisujemy do aktualnego pliku wynik testu.
  */
 void MainWindow::on_saveButton_clicked()
 {
@@ -318,8 +327,9 @@ void MainWindow::on_saveButton_clicked()
     on_resetButton_clicked();
 
 }
-/*
- * Rozwinieto liste userow
+/*!
+ * Metoda wywoływana gdy wybieramy pozycję z listy userów. Ma za zadanie przesłać string z informacją
+ * o aktualnie wybranym użytkowniku do odpowiedniego labela
  */
 void MainWindow::on_UserListCombo_activated(const QString &arg1)
 {
@@ -327,8 +337,9 @@ void MainWindow::on_UserListCombo_activated(const QString &arg1)
       currentUser = ui->UserListCombo->currentIndex();
       userComboArg = arg1;
 }
-/*
- * Kliknieto przycisk dodaj usera
+/*!
+ * Metoda wywoływana gdy został wciśnięty przycisk "Dodaj" (użytkownika).
+ * Tworzy folder z nazwą użytkownika, uzupełnia UserList oraz informuje o sukcesie operacji
  */
 void MainWindow::on_pushButton_clicked()
 {
@@ -352,8 +363,8 @@ void MainWindow::on_pushButton_clicked()
 
 
 }
-/*
- * Czysty reset tego co wpisano
+/*!
+ * Metoda resetuje tekst wpisany przez użytkownika oraz oba wektory - timestampów oraz znaków
  */
 void MainWindow::on_resetButton_clicked()
 {

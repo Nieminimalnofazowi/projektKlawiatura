@@ -1,12 +1,19 @@
 # projektKlawiatura
-DONE:
--Poprawiono zapis timestampow w .txt
+Program ma na celu zbieranie danych dotyczących dynamiki wpisywania haseł przez różnych użytkowników.
+W celu pobrania próbki danych należy:
 
--Dodano zapis wcisnietego klawisza w .txt (dalej brakuje shiftów i backspace'ów)
+-Wybrać użytkownika z listy lub stworzyć nowego
 
--Podstawowy skrypt w matlabie zrobiony
+-Po wybraniu użytkownika wybrać tekst do przepisania z rozwijanej listy
 
-TO DO:
--Poprawić bledy na -> brak blokady, zmienic kolor czerwony np na zwykly czerwony label BLAD. Naliczac wszystkie bledy oprocz backspace.
+-Można opcjonalnie wybrać własny tekst do przepisania. Wskazane są krótkie pliki, imitujące internetowe hasła.
 
--Poprawic userów na -> kazdy user ma wlasny katalog + kazda proba usera to osobny plik tekstowy w danym katalogu (proponuje date/time nazwe pliku .txt)
+-Po wybraniu tekstu pojawia się on w górnym oknie. W dolnym oknie wpisujemy widoczne wyżej hasło.
+
+-W przypadku jakichkolwiek błędów można poprawić je klawiszem Backspace. W przypadku chęci zresetowania aktualnej próby - wcisnąć przycisk "Reset"
+
+-Po przepisaniu w całości poprawnie hasła można zatwierdzić próbkę klawiszem Enter. Próba zatwierdzenia hasła enterem bez przepisania hasła w całości poprawnie skutkuje zresetowaniem próbki.
+
+-Po zatwierdzeniu próbki pojawia się komunikat o pomyślnym zapisie danych do pliku. Ten komunikat również można zatwierdzić enterem, a następnie od razu zacząć wpisywać kolejną próbkę. Ułatwia to pobierania dużej ilości danych - użytkownik nie musi używać myszki.
+
+-W przypadku chęci pobrania danych od innej osoby w każdej chwili można zmienić użytkownika z listy rozwijanej po prawej stronie.

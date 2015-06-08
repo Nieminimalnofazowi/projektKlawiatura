@@ -4,22 +4,32 @@
 #include<QVector>
 #include<QTextStream>
 #include<QFile>
-
+/*!
+ * \brief Klasa user obsługuje tworzonych użytkowników
+ */
 class user
 {
     //publiczne metody, pola prywatne
 public:
     //constr
     user();
-    //constructor przeladowanie
+    /*!
+     * \brief Konstruktor przeładowany
+     * \param Nazwa użytkownika
+     */
     user(QString constructedID);
     //destr
     ~user();
-    //metoda pozwalajaca na dostep do ID
+    /*!
+     * \brief Metoda pozwalająca na dostęp do userID
+     * \return Zwraca nazwę użytkownika
+     */
     QString getUserID();
 
 private:
-    //np imie i nazwisko, nick
+    /*!
+     * \brief Nazwa użytkownika
+     */
     QString userID;
 };
 
