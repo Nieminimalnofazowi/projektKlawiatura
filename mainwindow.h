@@ -111,6 +111,15 @@ private:
      */
     int mistakeCounter; //licznik pomylek
     /*!
+     * \brief licznik pomylek na pojedynczym znaku vector
+     */
+    QVector<int> bladZnakVector;
+    /*!
+     *
+     * \brief Licznik pomylek na pojedynczym znaku
+     */
+    int bladZnak;
+    /*!
      * \brief Aktualny numer usera w Combo
      */
     int currentUser; //aktualny numer usera w combo

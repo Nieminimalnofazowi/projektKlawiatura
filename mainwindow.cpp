@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->addUser,SIGNAL(returnPressed()),ui->pushButton,SIGNAL(clicked()));
 
     mistakeCounter=0;
+    bladZnak=0;
     mistakes_string = "Błędy: ";
     mistakes_string +=  QString::number(mistakeCounter);
     ui->mistakesCounter->setText(mistakes_string); //ustaw pierwotny text na label
@@ -109,12 +110,13 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
         if(typedText.length()==0)
             elapsedTime.restart();
-        if(typedText.length() == 1 ) //pierwszy znak - rozpoczecie odliczania czasu
+        /*if(typedText.length() == 1 ) //pierwszy znak - rozpoczecie odliczania czasu
         {
             elapsedTime.restart(); //liczymy czas pisania
             deltsVector.append(elapsedTime.elapsed());
             charsVector.append(event->text());
-        }
+            bladZnakVector.append(bladZnak);
+        }*/
 
 
         int TTL = typedText.length(); //TypedTextLength
@@ -125,6 +127,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         {
 
                ++mistakeCounter;
+                bladZnak++;
                 mistake_flag=1;
                 typedText.insert(typedText.left(tempCounter).length() ,redColour);
 
@@ -137,6 +140,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         {
 
                 mistake_flag=0;
+
                 tempCounter=typedText.length();
 
 
@@ -151,6 +155,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
             {
                 deltsVector.append(elapsedTime.elapsed());
                 charsVector.append(event->text());
+                bladZnakVector.append(bladZnak);
+                bladZnak=0;
             }
         }
     }
@@ -313,7 +319,8 @@ void MainWindow::on_saveButton_clicked()
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
         out << deltsVector[i] << "\t";
-        out << charsVector[i];
+        out << charsVector[i] << "\t";
+        out << bladZnakVector[i];
         out << "\n";
     }
     out << mistakeCounter;
@@ -375,7 +382,8 @@ void MainWindow::on_resetButton_clicked()
     ui->mistakesCounter->setText(mistakes_string);
     deltsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych timestampow
     charsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczaasowych znakow
-
+    bladZnakVector.clear();
+    bladZnak=0;
     elapsedTime.restart(); //restart milisekund
     mistake_flag=0; //flaga na 0
 }
