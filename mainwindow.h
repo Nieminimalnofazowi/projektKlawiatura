@@ -57,6 +57,8 @@ private:
     QVector<QString> charsVector; //vector wcisnietych klawiszy
 
     int mistakeCounter; //licznik pomylek
+    int bladZnak;
+    QVector<int> bladZnakVector;
     int currentUser; //aktualny numer usera w combo
     int currentText; //aktualny numer tekstu w combo
 
@@ -72,6 +74,7 @@ private:
     QVector<user*> UserList; //vector wskaznikow na obiekty klasy user
     QString activeUserString; //aktualny user (do wyswietlania na labelu)
     QString userComboArg; //argument z userComboList
+    QString textArg;
     QFile* statsFile; //aktualny plik do zapisu timestampow
 
     QTextCursor tmpCursor; //kursor uzywany do kolorowania tekstu

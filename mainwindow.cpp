@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->addUser,SIGNAL(returnPressed()),ui->pushButton,SIGNAL(clicked()));
 
     mistakeCounter=0;
+    bladZnak=0;
     mistakes_string = "Błędy: ";
     mistakes_string +=  QString::number(mistakeCounter);
     ui->mistakesCounter->setText(mistakes_string); //ustaw pierwotny text na label
@@ -106,12 +107,12 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         typedText = ui->typedTextBox->toPlainText(); //przesyl tekstu z TextBoxa do QString
         if(typedText.length()==0)
             elapsedTime.restart();
-        if(typedText.length() == 1 ) //pierwszy znak - rozpoczecie odliczania czasu
+        /*if(typedText.length() == 1 ) //pierwszy znak - rozpoczecie odliczania czasu
         {
             elapsedTime.restart(); //liczymy czas pisania
             deltsVector.append(elapsedTime.elapsed());
             charsVector.append(event->text());
-        }
+        }*/
 
 
         int TTL = typedText.length(); //TypedTextLength
@@ -122,6 +123,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
         {
 
                ++mistakeCounter;
+                ++bladZnak;
                 mistake_flag=1;
                 typedText.insert(typedText.left(tempCounter).length() ,redColour);
 
@@ -148,6 +150,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
             {
                 deltsVector.append(elapsedTime.elapsed());
                 charsVector.append(event->text());
+                bladZnakVector.append(bladZnak);
+                bladZnak=0;
             }
         }
     }
@@ -233,6 +237,7 @@ void MainWindow::on_textList_activated(const QString &arg1)
         ui->saveButton->setEnabled(1);
         currentText = ui->textList->currentIndex();
     }
+    textArg=arg1;
 }
 
 
@@ -297,7 +302,7 @@ void MainWindow::on_saveButton_clicked()
     }
     date = day.currentDateTime().toString();
     date.replace(":",".");
-    QString fileName = QString("users/"+userComboArg+"/"+"%0.txt").arg(date);
+    QString fileName = QString("users/"+userComboArg+"/"+textArg+"/"+"%0.txt").arg(date);
     this->statsFile = new QFile(fileName);
     if(!this->statsFile->open(QIODevice::ReadWrite | QIODevice::Text)) //otworz
         return;
@@ -307,10 +312,11 @@ void MainWindow::on_saveButton_clicked()
 
     for (int i=0 ; i<deltsVector.size() ; i++)
     {
-        if(charsVector[i]=="")
+        if(charsVector[i]=="" || charsVector[i]=="")
             continue;
         out << deltsVector[i] << "\t";
-        out << charsVector[i];
+        out << charsVector[i] << "\t";
+        out << bladZnakVector[i];
         out << "\n";
     }
     out << mistakeCounter;
@@ -346,6 +352,11 @@ void MainWindow::on_pushButton_clicked()
     { //gdy cos wpisano
 
         QDir().mkdir("users/"+NewUserName+"/"); // tworzenie folderu z userem zamiast pliku
+        QDir().mkdir("users/"+NewUserName+"/Tekst 1"+"/");
+        QDir().mkdir("users/"+NewUserName+"/Tekst 2"+"/");
+        QDir().mkdir("users/"+NewUserName+"/Tekst 3"+"/");
+        QDir().mkdir("users/"+NewUserName+"/Tekst 4"+"/");
+        QDir().mkdir("users/"+NewUserName+"/Tekst 5"+"/");
 
         UserList.append(new user(NewUserName)); //dodanie usera
 
@@ -370,6 +381,8 @@ void MainWindow::on_resetButton_clicked()
     ui->mistakesCounter->setText(mistakes_string);
     deltsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczasowych timestampow
     charsVector.clear(); //zerujemy i zwalniamy pamiec z dotychczaasowych znakow
+    bladZnakVector.clear();
+    bladZnak=0;
 
     elapsedTime.restart(); //restart milisekund
     mistake_flag=0; //flaga na 0
